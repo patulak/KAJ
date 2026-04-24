@@ -85,7 +85,22 @@ function attach_drag(card_el, card, board, game, current_player) {
         card_el.style.top = `${new_y}px`;
     }
 
-    function drag_release(event) {
+    function is_on_board(mouse_x, mouse_y, board_rect) {
+        const rect = card_el.getBoundingClientRect();
+        const top_y = rect.y;
+        const bottom_y = rect.y + rect.height;
+        const left_x = rect.x;
+        const right_x = rect.x + rect.width;
+
+        if (board_rect.x <= left_x && right_x <= board_rect.x + board_rect.width &&
+            board_rect.y <= top_y && bottom_y <= board_rect.y + board_rect.height
+        ) {
+            return true
+        }
+        return false;
+    }
+
+    function drag_release(event) { //for playing card
         if (!dragging) return;
         dragging = false;
         card_el.classList.remove("dragging");
@@ -98,9 +113,12 @@ function attach_drag(card_el, card, board, game, current_player) {
         const grid_x = Math.round(mouse_x / UNIT);
         const grid_y = Math.round(mouse_y / UNIT);
 
-        if (true/*valid placement*/) {
+        if (is_on_board(mouse_x, mouse_y, board_rect)/* && TODO valid placement*/) {
             current_player.remove_from_hand(card);
             board.place_card(card, grid_x, grid_y, current_player.id, game.turn);
+            current_player.score += card.get_score();
+            //TODO start drawing a card
+            game.next_turn()
         }
         else {
             document.getElementById("player-hand-layer").appendChild(card_el);

@@ -49,6 +49,10 @@ export class Card {
         this.id = Card.current_id;
         Card.current_id += 1;
     }
+
+    get_score(){
+        return this.points; //TODO calculate corners/symbols etc if placed 
+    }
 }
 
 export class GoldenCard extends Card {

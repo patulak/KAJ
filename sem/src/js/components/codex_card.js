@@ -53,9 +53,16 @@ export class CodexCard extends HTMLElement {
                 </div>
 
                 <div class="card-center">
-                    <div><strong>${this.card.color}</strong></div>
-                    <div>points: ${this.card.points}</div>
-                    <div>id: ${this.card.id}</div>
+                    <div> ${this.card.points}</div>
+                    <div class="debug">_id: ${this.card.id}</div>
+                    <div class="requirements">
+                    ${this.card.requirements
+                        ? this.card.requirements
+                            .map(symbol => `<div class="symbol "style="background-color:${map_symbols[symbol]}"></div>`)
+                            .join("")
+                        : ""
+                    }
+                    </div>
                 </div>
             </div>
         `;

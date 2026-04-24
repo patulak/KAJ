@@ -3,6 +3,26 @@ import { Game } from "./game/game.js";
 import { Player } from "./game/player.js";
 import { render_game } from "./render/render_game.js";
 import { draw_grid } from "./render/render_grid.js";
+import { show_view } from "./tools/tools.js"
+
+
+const menu = document.getElementById("menu-button");
+const rules = document.getElementById("rules-button");
+const setup = document.getElementById("setup-button");
+const game = document.getElementById("game-button");
+const results = document.getElementById("results-button");
+
+menu.addEventListener("click", (event) => { show_view("menu") })
+rules.addEventListener("click", (event) => { show_view("rules") })
+setup.addEventListener("click", (event) => { show_view("setup") })
+game.addEventListener("click", (event) => { show_view("game") })
+results.addEventListener("click", (event) => { show_view("results") })
+
+
+
+
+
+
 
 let p1 = new Player("kolac", Colors.red)
 let p2 = new Player("pinki", Colors.blue)
@@ -16,12 +36,20 @@ let card1 = new Card(Colors.red, [0, 1, 1, 0], [null, Colors.red, Colors.blue, n
 let card2 = new Card(Colors.purple, [1, 1, 1, 0], [Colors.red, null, Colors.green, null], 1);
 let card3 = new GoldenCard(Colors.green, [0, 1, 1, 0], [null, null, null, null], 5, [Colors.green, Colors.green, Colors.green, Colors.green, Colors.green]);
 
-g.players[0].board.place_card(card1, 6, 3, p1.id, 1)
-g.players[0].board.place_card(card2, 0, 0, p1.id, 2)
+let card4 = new Card(Colors.blue, [0, 1, 1, 0], [null, Colors.purple, Colors.blue, null], 0);
+let card5 = new Card(Colors.green, [1, 1, 1, 0], [Colors.red, null, Colors.green, null], 1);
+let card6 = new GoldenCard(Colors.red, [0, 1, 1, 0], [null, null, null, null], 5, [Colors.green, Colors.green, Colors.green]);
+
+g.players[1].board.place_card(card4, 1, 1, p2.id, 1);
+g.players[1].board.place_card(card5, 5, 5, p2.id, 2);
+g.players[1].draw_card(card6)
+
+g.players[0].board.place_card(card1, 6, 3, p1.id, 1);
+g.players[0].board.place_card(card2, 0, 0, p1.id, 2);
 //g.players[0].board.place_card(card3, 10, 5, p1.id, 3)
-g.turn = 3;
 g.players[0].draw_card(card3)
 
+g.turn = 3;
 
 console.log(g);
 

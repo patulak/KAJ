@@ -8,9 +8,9 @@
     - [x] define game_state
     - [x] define player object
     - [x] define card object
-    - [ ] define placed-card object
-    - [ ] create tiny cards.json with maybe 8–12 test cards
-    - [ ] create tiny objectives.json with 3–5 test objectives
+    - [n] define placed-card object
+    - [n] create tiny cards.json with maybe 8–12 test cards
+    - [n] create tiny objectives.json with 3–5 test objectives
 - [ ] Phase 3: turn skeleton
     - [ ] create new game from setup form
     - [ ] initialize players

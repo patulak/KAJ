@@ -50,6 +50,15 @@
 }
 
 
+
+/* Grid*/
+
+#board-grid {
+    opacity: 0.2;
+    stroke: #8a7f6b;
+    stroke-width: 1;
+}
+
 /* Hand */
 
 #player-hand-layer {
