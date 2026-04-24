@@ -1,0 +1,8 @@
+Popis semestrální práce
+
+Webová aplikace inspirovaná deskovou hrou Codex Naturalis pro 2–4 hráče (střídání u jednoho zařízení).
+Hráči pokládají karty podle pravidel, sbírají body a plní cíle.
+Aplikace bude kontrolovat validitu tahů, počítat body a vyhodnotí výsledek hry.
+
+Bude obsahovat menu, nastavení hráčů, herní obrazovku s plánem (SVG) a stránku s pravidly.
+Hra bude realizována pomocí HTML5, CSS a JavaScriptu a umožní uložení rozehrané hry v prohlížeči.

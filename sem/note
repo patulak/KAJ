@@ -1,0 +1,33 @@
+normal cards:
+    per color:
+        4 basic (2 symbols, 3 open corners)
+        3 points (1 symbol, 3 corners, 1 point)
+        3 special (1 symbol, 1 other symbol, 1 special symbol, 3 corners)
+        = 10 cards
+    = 40 cards
+
+gold cards:
+    per color:
+        1 5_point (2 corners, 5 points, req: 5 symbols), *for each color different side of corners
+        3 3_point (2 corners, 1 special symbol, 3 points, req: 3 symbols)
+        3 2_point (3 corners, 2 points per corner, req: 3 symbols; 1 other symbol)
+        3 1_point (3 corners, 1 point per special symbol, 1 special symbol, req: 2 symbols; 1 other symbol)
+        = 10 cards
+    = 40 cards
+= 80 cards
+
+starting cards: either (4 corners, all 4 symbols)
+                2 have 1 symbol, 4 corners, 2 symbols (1 same as middle)
+                2 have 2 symbols, 4 corners
+                2 have 3 symbols, 2 corners
+
+objectives:
+        3 points: all 3 special symbols
+                  patterns 2 same color under each + 1 on side different
+
+        2 points: 4 diagonal of 3 of same color
+                  4 three same symbols
+                  3 two of special symbols
+
+
+

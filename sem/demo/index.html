@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codex SVG Drag Demo</title>
+    <style>
+        :root {
+            --board-w: 980px;
+            --board-h: 640px;
+            --grid: 80px;
+            --dot: #7a6f58;
+            --bg: #f5f0e6;
+            --panel: #fffdf8;
+            --border: #9e9074;
+            --shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(180deg, #efe8d9, #e3d8c2);
+            color: #2f2a22;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 24px;
+            display: grid;
+            gap: 18px;
+            justify-items: center;
+        }
+
+        .info {
+            width: min(1100px, 100%);
+            background: var(--panel);
+            border: 1px solid #d2c5ad;
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .info h1 {
+            margin: 0 0 8px;
+            font-size: 1.35rem;
+        }
+
+        .info p {
+            margin: 6px 0;
+            line-height: 1.45;
+        }
+
+        .board-shell {
+            width: min(1100px, 100%);
+            background: rgba(255, 255, 255, 0.32);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            overflow: auto;
+        }
+
+        .board-area {
+            position: relative;
+            width: var(--board-w);
+            height: var(--board-h);
+            margin: 0 auto;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 2px solid #a69573;
+            background: #f8f3e8;
+        }
+
+        .board-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .cards-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        codex-card {
+            position: absolute;
+            display: block;
+            width: 160px;
+            height: 160px;
+            pointer-events: auto;
+            touch-action: none;
+            user-select: none;
+        }
+
+        .legend {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        .pill {
+            background: #f3ead7;
+            border: 1px solid #d0c2a5;
+            border-radius: 999px;
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <section class="info">
+            <h1>Codex drag &amp; drop demo</h1>
+            <p>This demo uses an <strong>SVG board background</strong> and draggable <strong>custom HTML
+                    elements</strong> rendered on top of it.</p>
+            <p>Drag the cards. Each card snaps so that its selected corner aligns to the nearest board anchor. Use the
+                small corner button on a card to cycle which corner is used for snapping.</p>
+            <div class="legend">
+                <span class="pill">SVG board</span>
+                <span class="pill">Custom element: &lt;codex-card&gt;</span>
+                <span class="pill">Pointer drag</span>
+                <span class="pill">Snap to corner anchors</span>
+            </div>
+        </section>
+
+        <section class="board-shell">
+            <div class="board-area" id="board">
+                <svg class="board-svg" viewBox="0 0 980 640" aria-label="Codex demo board">
+                    <defs>
+                        <pattern id="paper" width="36" height="36" patternUnits="userSpaceOnUse">
+                            <path d="M18 1 C24 1 31 7 31 13 C31 19 24 25 18 25 C12 25 5 19 5 13 C5 7 12 1 18 1 Z"
+                                fill="none" stroke="#e4dac4" stroke-width="1" opacity="0.7" />
+                        </pattern>
+                        <pattern id="gridDots" width="80" height="80" patternUnits="userSpaceOnUse">
+                            <circle cx="0" cy="0" r="4" fill="#7a6f58" opacity="0.72" />
+                            <circle cx="40" cy="40" r="1.5" fill="#cabd9f" opacity="0.6" />
+                        </pattern>
+                    </defs>
+
+                    <rect x="0" y="0" width="980" height="640" fill="#f6f0e2" />
+                    <rect x="0" y="0" width="980" height="640" fill="url(#paper)" />
+                    <rect x="0" y="0" width="980" height="640" fill="url(#gridDots)" />
+
+                    <g opacity="0.22" stroke="#9f916e" stroke-width="1">
+                        <path d="M0 80 H980" />
+                        <path d="M0 160 H980" />
+                        <path d="M0 240 H980" />
+                        <path d="M0 320 H980" />
+                        <path d="M0 400 H980" />
+                        <path d="M0 480 H980" />
+                        <path d="M0 560 H980" />
+                        <path d="M80 0 V640" />
+                        <path d="M160 0 V640" />
+                        <path d="M240 0 V640" />
+                        <path d="M320 0 V640" />
+                        <path d="M400 0 V640" />
+                        <path d="M480 0 V640" />
+                        <path d="M560 0 V640" />
+                        <path d="M640 0 V640" />
+                        <path d="M720 0 V640" />
+                        <path d="M800 0 V640" />
+                        <path d="M880 0 V640" />
+                        <path d="M960 0 V640" />
+                    </g>
+
+                    <rect x="410" y="250" width="160" height="160" rx="18" fill="none" stroke="#6f664f" stroke-width="3"
+                        stroke-dasharray="10 8" opacity="0.55" />
+                    <text x="490" y="335" text-anchor="middle" font-size="22" fill="#6f664f" opacity="0.75">start
+                        area</text>
+                </svg>
+
+                <div class="cards-layer" id="cards-layer">
+                    <codex-card id="card-a" data-color="green" data-title="Leaf card" data-x="420"
+                        data-y="260"></codex-card>
+                    <codex-card id="card-b" data-color="purple" data-title="Butterfly card" data-x="180"
+                        data-y="120"></codex-card>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const BOARD_W = 980;
+        const BOARD_H = 640;
+        const GRID = 80;
+        const CARD_SIZE = 160;
+        const CORNERS = ["tl", "tr", "br", "bl"];
+        const CORNER_OFFSETS = {
+            tl: { x: 0, y: 0 },
+            tr: { x: CARD_SIZE, y: 0 },
+            br: { x: CARD_SIZE, y: CARD_SIZE },
+            bl: { x: 0, y: CARD_SIZE }
+        };
+
+        class CodexCard extends HTMLElement {
+            constructor() {
+                super();
+                this.active_corner = "tl";
+                this.dragging = false;
+                this.drag_offset = { x: 0, y: 0 };
+            }
+
+            connectedCallback() {
+                if (this.dataset.initialized === "1") return;
+                this.dataset.initialized = "1";
+                this.render();
+                this.set_position(
+                    Number(this.dataset.x || 0),
+                    Number(this.dataset.y || 0)
+                );
+                this.setup_events();
+                this.update_corner_ui();
+            }
+
+            render() {
+                const color = this.dataset.color || "green";
+                const title = this.dataset.title || "Card";
+
+                const color_map = {
+                    green: { main: "#76b56e", dark: "#2d6a38", light: "#dff0d8", icon: "🍃" },
+                    purple: { main: "#b46fc6", dark: "#5a2f6f", light: "#efdef5", icon: "🦋" },
+                    red: { main: "#cf6e59", dark: "#7b2c20", light: "#f4ddd7", icon: "🍄" },
+                    blue: { main: "#6da8d8", dark: "#224f78", light: "#dae8f7", icon: "🐦" }
+                };
+
+                const palette = color_map[color] || color_map.green;
+
+                this.innerHTML = `
+          <style>
+            .card {
+              width: 100%;
+              height: 100%;
+              border-radius: 18px;
+              border: 3px solid ${palette.dark};
+              background: linear-gradient(135deg, ${palette.light}, ${palette.main});
+              position: relative;
+              box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+              overflow: hidden;
+              cursor: grab;
+            }
+            :host(.dragging) .card {
+              cursor: grabbing;
+              box-shadow: 0 16px 34px rgba(0,0,0,0.26);
+            }
+            .card::before {
+              content: "";
+              position: absolute;
+              inset: 0;
+              background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.38), transparent 32%),
+                          radial-gradient(circle at 78% 72%, rgba(255,255,255,0.20), transparent 30%);
+              pointer-events: none;
+            }
+            .title {
+              position: absolute;
+              left: 16px;
+              right: 16px;
+              top: 12px;
+              padding: 6px 10px;
+              font-weight: 700;
+              text-align: center;
+              color: ${palette.dark};
+              background: rgba(255,255,255,0.68);
+              border-radius: 999px;
+              font-size: 14px;
+            }
+            .center-icon {
+              position: absolute;
+              inset: 0;
+              display: grid;
+              place-items: center;
+              font-size: 46px;
+              opacity: 0.92;
+            }
+            .corner {
+              position: absolute;
+              width: 28px;
+              height: 28px;
+              border-radius: 50%;
+              background: #fffbe9;
+              border: 2px solid ${palette.dark};
+              display: grid;
+              place-items: center;
+              font-size: 14px;
+              font-weight: 700;
+              color: ${palette.dark};
+            }
+            .tl { left: 8px; top: 8px; }
+            .tr { right: 8px; top: 8px; }
+            .br { right: 8px; bottom: 8px; }
+            .bl { left: 8px; bottom: 8px; }
+            .corner.active {
+              outline: 3px solid #fff;
+              transform: scale(1.12);
+            }
+            .snap-button {
+              position: absolute;
+              right: 10px;
+              top: 44px;
+              border: none;
+              background: rgba(255,255,255,0.92);
+              border: 2px solid ${palette.dark};
+              color: ${palette.dark};
+              border-radius: 10px;
+              font-size: 12px;
+              padding: 5px 8px;
+              cursor: pointer;
+              font-weight: 700;
+            }
+            .hint {
+              position: absolute;
+              left: 12px;
+              right: 12px;
+              bottom: 40px;
+              text-align: center;
+              font-size: 12px;
+              color: ${palette.dark};
+              font-weight: 600;
+              background: rgba(255,255,255,0.6);
+              border-radius: 999px;
+              padding: 4px 8px;
+            }
+          </style>
+          <div class="card">
+            <div class="title">${title}</div>
+            <button class="snap-button" type="button">corner: <span class="corner-name">TL</span></button>
+            <div class="center-icon">${palette.icon}</div>
+            <div class="corner tl" data-corner="tl">1</div>
+            <div class="corner tr" data-corner="tr">2</div>
+            <div class="corner br" data-corner="br">3</div>
+            <div class="corner bl" data-corner="bl">4</div>
+            <div class="hint">drag me</div>
+          </div>
+        `;
+            }
+
+            setup_events() {
+                this.addEventListener("pointerdown", this.on_pointer_down.bind(this));
+                this.querySelector(".snap-button").addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    this.cycle_corner();
+                });
+            }
+
+            cycle_corner() {
+                const current_index = CORNERS.indexOf(this.active_corner);
+                this.active_corner = CORNERS[(current_index + 1) % CORNERS.length];
+                this.update_corner_ui();
+            }
+
+            update_corner_ui() {
+                this.querySelectorAll(".corner").forEach((element) => {
+                    element.classList.toggle("active", element.dataset.corner === this.active_corner);
+                });
+                this.querySelector(".corner-name").textContent = this.active_corner.toUpperCase();
+            }
+
+            set_position(x, y) {
+                this.style.left = `${x}px`;
+                this.style.top = `${y}px`;
+                this.dataset.x = String(x);
+                this.dataset.y = String(y);
+            }
+
+            on_pointer_down(event) {
+                if (event.target.closest("button")) return;
+
+                const rect = this.getBoundingClientRect();
+                this.dragging = true;
+                this.classList.add("dragging");
+                this.drag_offset.x = event.clientX - rect.left;
+                this.drag_offset.y = event.clientY - rect.top;
+                this.setPointerCapture(event.pointerId);
+
+                this._move_handler = this.on_pointer_move.bind(this);
+                this._up_handler = this.on_pointer_up.bind(this);
+
+                this.addEventListener("pointermove", this._move_handler);
+                this.addEventListener("pointerup", this._up_handler);
+                this.addEventListener("pointercancel", this._up_handler);
+            }
+
+            on_pointer_move(event) {
+                if (!this.dragging) return;
+                const board_rect = document.getElementById("board").getBoundingClientRect();
+
+                let x = event.clientX - board_rect.left - this.drag_offset.x;
+                let y = event.clientY - board_rect.top - this.drag_offset.y;
+
+                x = Math.max(0, Math.min(BOARD_W - CARD_SIZE, x));
+                y = Math.max(0, Math.min(BOARD_H - CARD_SIZE, y));
+
+                this.set_position(x, y);
+            }
+
+            on_pointer_up(event) {
+                if (!this.dragging) return;
+                this.dragging = false;
+                this.classList.remove("dragging");
+                this.releasePointerCapture(event.pointerId);
+
+                this.removeEventListener("pointermove", this._move_handler);
+                this.removeEventListener("pointerup", this._up_handler);
+                this.removeEventListener("pointercancel", this._up_handler);
+
+                this.snap_to_grid();
+            }
+
+            snap_to_grid() {
+                const corner_offset = CORNER_OFFSETS[this.active_corner];
+                const current_x = Number(this.dataset.x || 0);
+                const current_y = Number(this.dataset.y || 0);
+
+                const selected_corner_x = current_x + corner_offset.x;
+                const selected_corner_y = current_y + corner_offset.y;
+
+                const anchor_x = Math.round(selected_corner_x / GRID) * GRID;
+                const anchor_y = Math.round(selected_corner_y / GRID) * GRID;
+
+                let new_x = anchor_x - corner_offset.x;
+                let new_y = anchor_y - corner_offset.y;
+
+                new_x = Math.max(0, Math.min(BOARD_W - CARD_SIZE, new_x));
+                new_y = Math.max(0, Math.min(BOARD_H - CARD_SIZE, new_y));
+
+                this.set_position(new_x, new_y);
+            }
+        }
+
+        customElements.define("codex-card", CodexCard);
+    </script>
+</body>
+
+</html>
