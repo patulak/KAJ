@@ -44,14 +44,30 @@ g.players[1].board.place_card(card4, 1, 1, p2.id, 1);
 g.players[1].board.place_card(card5, 5, 5, p2.id, 2);
 g.players[1].draw_card(card6)
 
-g.players[0].board.place_card(card1, 6, 3, p1.id, 1);
-g.players[0].board.place_card(card2, 0, 0, p1.id, 2);
+//g.players[0].board.place_card(card1, 6, 3, p1.id, 1);
+//g.players[0].board.place_card(card2, 0, 0, p1.id, 2);
 //g.players[0].board.place_card(card3, 10, 5, p1.id, 3)
 g.players[0].draw_card(card3)
 
 g.turn = 3;
 
-console.log(g);
+g.deck.generate_deck();
+
+
+let i = 0;
+let x = 0;
+let y = 0;
+for (let card of g.deck.cards) {
+    g.players[0].board.place_card(card, x, y, p1.id, i)
+    i++;
+    x += 6;
+    if (i % 5 == 0) {
+        x = 0;
+        y += 4;
+    }
+}
+
+console.log(g.deck.cards);
 
 draw_grid()
 render_game(g);

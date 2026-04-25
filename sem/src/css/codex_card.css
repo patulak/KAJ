@@ -43,6 +43,10 @@ codex-card .card-root {
     }
 }
 
+codex-card .card-root.golden {
+    border: 3px solid goldenrod;
+}
+
 codex-card .card-center {
     position: absolute;
     inset: 0;
@@ -65,9 +69,10 @@ codex-card .corner.back {
     justify-content: center;
     font-size: 12px;
     font-weight: bold;
+}
+
+codex-card .corner.back.active {
     background-color: #999;
-
-
 }
 
 /* Symbol */

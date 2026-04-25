@@ -1,14 +1,86 @@
-import { Card, Symbols, Colors } from "./cards.js";
+import { Card, Symbols, Colors, GoldenCard } from "./cards.js";
 
 export class Deck {
 
-    constructor(){
+    constructor() {
+        this.cards = [];
         this.not_drawed_cards = [];
         this.drawed_cards = [];
     }
 
     generate_deck() {
-        
+        //const all_corners = [tl, tr, br, bl]
+
+        const specials = [Symbols.paper, Symbols.ink, Symbols.feather];
+        let last_color = Colors.all_colors()[Colors.all_colors().length - 1];
+        let overall = 0;
+        let two_corners = [[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [1, 0, 0, 1]];
+        for (let color of Colors.all_colors()) {
+            //normal
+            for (let i = 0; i < 4; i++) {
+                let corners = [];
+                let symbols = [];
+                let pushed = false;
+                for (let j = 0; j < 4; j++) {
+                    corners.push(i == j ? 0 : 1);
+                    symbols.push(i == j ? null : color);
+                    if (i != j && !pushed) {
+                        symbols[j] = null;
+                        pushed = true;
+                    }
+                }
+                this.cards.push(new Card(color, corners, symbols, 0))
+            }
+            for (let i = 0; i < 3; i++) {
+                let corners = [];
+                let symbols = [];
+                let symbols2 = [];
+                let corners2 = [];
+
+                let pair_symbols = [];
+
+
+                let prep_symbols2 = [null, color, last_color, specials[i]];
+                for (let j = 0; j < 4; j++) {
+                    corners.push(i == j ? 0 : 1);
+                    symbols.push(i + 1 == j ? color : null);
+                    symbols2.push(prep_symbols2[(j + i + overall) % 4]);
+                    corners2.push(symbols2[j] != null ? 1 : 0);
+                    pair_symbols.push(j == two_corners[(i + overall) % 4].findIndex((e) => e == 1) ? specials[i] : 0);
+                }
+                this.cards.push(new Card(color, corners, symbols, 0));
+                this.cards.push(new Card(color, corners2, symbols2, 0));
+                //golden
+
+                this.cards.push(new GoldenCard(color, two_corners[(i + overall) % 4], pair_symbols, 3, [color, color, color]));
+            }
+
+            //#TODO 2_point, 1_point golden
+
+
+            last_color = color;
+            overall++;
+        }
+        this.cards.push(new GoldenCard(Colors.red,
+            [1, 1, 0, 0],
+            [null, null, null, null],
+            5,
+            [Colors.red, Colors.red, Colors.red, Colors.red, Colors.red]));
+        this.cards.push(new GoldenCard(Colors.blue,
+            [0, 1, 1, 0],
+            [null, null, null, null],
+            5,
+            [Colors.blue, Colors.blue, Colors.blue, Colors.blue, Colors.blue]));
+        this.cards.push(new GoldenCard(Colors.purple,
+            [0, 0, 1, 1],
+            [null, null, null, null],
+            5,
+            [Colors.purple, Colors.purple, Colors.purple, Colors.purple, Colors.purple]));
+        this.cards.push(new GoldenCard(Colors.green,
+            [1, 0, 0, 1],
+            [null, null, null, null],
+            5,
+            [Colors.green, Colors.green, Colors.green, Colors.green, Colors.green]));
     }
 
     draw_random_card() {

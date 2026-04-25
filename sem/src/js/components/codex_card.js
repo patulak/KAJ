@@ -1,4 +1,4 @@
-import { Card, Colors, Symbols } from "../game/cards.js";
+import { Card, Colors, GoldenCard, Symbols } from "../game/cards.js";
 
 export class CodexCard extends HTMLElement {
     constructor() {
@@ -37,19 +37,28 @@ export class CodexCard extends HTMLElement {
             "": "#999"
         }
 
+        function get_corner_color(card, idx) {
+            if (card.corners[idx]) {
+                return `style="background-color: ${map_symbols[card.symbols[idx] ?? ""]}"`;
+            }
+            else {
+                return "";
+            }
+        }
+
         this.innerHTML = `
-            <div class="card-root">
-                <div class="corner tl back">
-                    <div class="corner tl" style="background-color:${map_symbols[this.card.symbols[0] ?? ""]}"></div>
+            <div class="card-root${this.card.golden ? " golden" : ""}">
+                <div class="corner tl back${this.card.corners[0] ? " active" : ""}">
+                    <div class="corner tl" ${get_corner_color(this.card, 0)}></div>
                 </div>
-                <div class="corner tr back">
-                    <div class="corner tr" style="background-color:${map_symbols[this.card.symbols[1] ?? ""]}"></div>
+                <div class="corner tr back${this.card.corners[1] ? " active" : ""}">
+                    <div class="corner tr" ${get_corner_color(this.card, 1)}></div>
                 </div>
-                <div class="corner br back">
-                    <div class="corner br" style="background-color:${map_symbols[this.card.symbols[2] ?? ""]}"></div>
+                <div class="corner br back${this.card.corners[2] ? " active" : ""}">
+                    <div class="corner br" ${get_corner_color(this.card, 2)}></div>
                 </div>
-                <div class="corner bl back">
-                    <div class="corner bl" style="background-color:${map_symbols[this.card.symbols[3] ?? ""]}"></div>
+                <div class="corner bl back${this.card.corners[3] ? " active" : ""}">
+                    <div class="corner bl" ${get_corner_color(this.card, 3)}></div>
                 </div>
 
                 <div class="card-center">
@@ -57,11 +66,11 @@ export class CodexCard extends HTMLElement {
                     <div class="debug">_id: ${this.card.id}</div>
                     <div class="requirements">
                     ${this.card.requirements
-                        ? this.card.requirements
-                            .map(symbol => `<div class="symbol "style="background-color:${map_symbols[symbol]}"></div>`)
-                            .join("")
-                        : ""
-                    }
+                ? this.card.requirements
+                    .map(symbol => `<div class="symbol "style="background-color:${map_symbols[symbol]}"></div>`)
+                    .join("")
+                : ""
+            }
                     </div>
                 </div>
             </div>
