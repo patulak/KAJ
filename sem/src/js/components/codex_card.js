@@ -46,7 +46,8 @@ export class CodexCard extends HTMLElement {
             }
         }
 
-        this.innerHTML = `
+        if (!this.card.is_flipped) {
+            this.innerHTML = `
             <div class="card-root${this.card.golden ? " golden" : ""}">
                 <div class="corner tl back${this.card.corners[0] ? " active" : ""}">
                     <div class="corner tl" ${get_corner_color(this.card, 0)}></div>
@@ -62,19 +63,43 @@ export class CodexCard extends HTMLElement {
                 </div>
 
                 <div class="card-center">
-                    <div> ${this.card.points}</div>
+                    <div> ${this.card.points}${this.card.per_corner ? " pc" : ""}${this.card.per_special_symbol ? " " + this.card.special_symbol : ""}</div>
                     <div class="debug">_id: ${this.card.id}</div>
                     <div class="requirements">
                     ${this.card.requirements
-                ? this.card.requirements
-                    .map(symbol => `<div class="symbol "style="background-color:${map_symbols[symbol]}"></div>`)
-                    .join("")
-                : ""
-            }
+                    ? this.card.requirements
+                        .map(symbol => `<div class="symbol "style="background-color:${map_symbols[symbol]}"></div>`)
+                        .join("")
+                    : ""
+                }
                     </div>
                 </div>
             </div>
-        `;
+            `;
+        } else {
+            this.innerHTML = `
+            <div class="card-root${this.card.golden ? " golden" : ""}">
+                <div class="corner tl back active">
+                    <div class="corner tl"></div>
+                </div>
+                <div class="corner tr back active">
+                    <div class="corner tr"></div>
+                </div>
+                <div class="corner br back active">
+                    <div class="corner br"></div>
+                </div>
+                <div class="corner bl back active">
+                    <div class="corner bl"></div>
+                </div>
+
+                <div class="card-center">
+                    <div> class="debug" ${this.card.points}</div>
+                    <div> flipped</div>
+                    <div class="requirements debug"></div>
+                </div>
+            </div>
+            `;
+        }
 
         this.style.setProperty("--card-bg", bg);
     }

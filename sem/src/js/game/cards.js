@@ -31,15 +31,11 @@ export class Symbols {
 export class Card {
     static current_id = 0;
 
-    constructor(color, corners, symbols, points, per_special_symbol = false, special_symbol = null, per_corner = false) { //Red, [0,1,1,0], [Red, Null, Null, Blue], 1
+    constructor(color, corners, symbols, points) { //Red, [0,1,1,0], [Red, Null, Null, Blue], 1
         this.color = color;
         this.corners = corners;
         this.symbols = symbols;
         this.points = points;
-
-        this.per_special_symbol = per_special_symbol;
-        this.special_symbol = special_symbol;
-        this.per_corner = per_corner;
 
         this.is_flipped = false;
 
@@ -60,9 +56,12 @@ export class Card {
 }
 
 export class GoldenCard extends Card {
-    constructor(color, corners, symbols, points, requirements) { //Red, [0,1,1,0], [Red, Null, Null, Blue], 1, {Green: 3, Blue: 1}
+    constructor(color, corners, symbols, points, requirements, per_special_symbol = false, special_symbol = null, per_corner = false) { //Red, [0,1,1,0], [Red, Null, Null, Blue], 1, {Green: 3, Blue: 1}
         super(color, corners, symbols, points)
         this.requirements = requirements;
+        this.per_special_symbol = per_special_symbol;
+        this.special_symbol = special_symbol;
+        this.per_corner = per_corner;
         this.golden = true;
     }
 }

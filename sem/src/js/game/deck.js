@@ -54,8 +54,37 @@ export class Deck {
 
                 this.cards.push(new GoldenCard(color, two_corners[(i + overall) % 4], pair_symbols, 3, [color, color, color]));
             }
+            let current_color = 0;
+            for (let i = 0; i < 3; i++) {
+                let corners = [];
+                let corners2 = [];
+                let symbols = [null, null, null, null];
+                let symbols2 = [null, null, null, null];
 
-            //#TODO 2_point, 1_point golden
+                let count = 0;
+
+                for (let j = 0; j < 4; j++) {
+                    corners.push((i + overall) % 4 == j ? 0 : 1);
+                    corners2.push((i + 1 + overall) % 4 == j ? 0 : 1);
+                    if (corners2[j] == 1) {
+
+                        if (count == i) {
+                            symbols2[j] = specials[i];
+                        }
+                        count++;
+                    }
+
+                }
+                if (Colors.all_colors()[current_color] == color) {
+                    current_color++;
+                }
+
+                this.cards.push(new GoldenCard(color, corners, symbols, 2, [color, color, color, Colors.all_colors()[current_color]], false, null, true));
+                this.cards.push(new GoldenCard(color, corners2, symbols2, 1, [color, color, Colors.all_colors()[current_color]], true, specials[i], false));
+                current_color++;
+            }
+
+
 
 
             last_color = color;
