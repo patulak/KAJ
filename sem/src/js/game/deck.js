@@ -4,8 +4,15 @@ export class Deck {
 
     constructor() {
         this.cards = [];
-        this.not_drawed_cards = [];
-        this.drawed_cards = [];
+        this.normal_cards = [];
+        this.golden_cards = [];
+
+        this.shown_normal_cards = [];
+        this.shown_golden_cards = [];
+
+        this.drawed_normal_cards = [];
+        this.drawed_golden_cards = [];
+
         this.starting_cards = [];
         this.drawed_starting_cards = [];
     }
@@ -111,11 +118,16 @@ export class Deck {
             [Colors.green, Colors.green, Colors.green, Colors.green, Colors.green]));
 
         for (let i = 0; i < this.cards.length; i++) {
-            this.not_drawed_cards.push(this.cards[i]);
+            if (this.cards[i].golden == true) {
+                this.golden_cards.push(this.cards[i]);
+            } else {
+                this.normal_cards.push(this.cards[i]);
+            }
         }
 
         this.generate_starting_cards();
         this.generate_objectives();
+        this.prepare_shown_cards();
     }
 
     generate_starting_cards() {
@@ -144,14 +156,49 @@ export class Deck {
 
     }
 
-    draw_random_card() {
-        if (this.not_drawed_cards.length === 0) {
+    prepare_shown_cards() {
+        this.shown_golden_cards.push(this.draw_random_golden_card())
+        this.shown_golden_cards.push(this.draw_random_golden_card())
+        this.shown_normal_cards.push(this.draw_random_normal_card())
+        this.shown_normal_cards.push(this.draw_random_normal_card())
+    }
+
+    draw_random_normal_card() {
+        if (this.normal_cards.length === 0) {
             return null;
         }
-        const index = Math.floor(Math.random() * this.not_drawed_cards.length);
-        const cards = this.not_drawed_cards.splice(index, 1);
-        this.drawed_cards.push(cards[0]);
+        const index = Math.floor(Math.random() * this.normal_cards.length);
+        const cards = this.normal_cards.splice(index, 1);
+        this.drawed_normal_cards.push(cards[0]);
         return cards[0];
+    }
+
+    draw_random_golden_card() {
+        if (this.golden_cards.length === 0) {
+            return null;
+        }
+        const index = Math.floor(Math.random() * this.golden_cards.length);
+        const cards = this.golden_cards.splice(index, 1);
+        this.drawed_golden_cards.push(cards[0]);
+        return cards[0];
+    }
+
+    take_shown_normal_card(index) {
+        if (index > this.shown_normal_cards.length) {
+            return null;
+        }
+        let card = this.shown_normal_cards[index];
+        this.shown_normal_cards[index] = this.draw_random_normal_card();
+        return card;
+    }
+
+    take_shown_golden_card(index) {
+        if (index > this.shown_golden_cards.length) {
+            return null;
+        }
+        let card = this.shown_golden_cards[index];
+        this.shown_golden_cards[index] = this.draw_random_normal_card();
+        return card;
     }
 
     draw_starting_card() {

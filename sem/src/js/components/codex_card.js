@@ -102,6 +102,7 @@ export class CodexCard extends HTMLElement {
         }
 
         this.style.setProperty("--card-bg", bg);
+        this.dataset.cardId = this.card.id;
     }
 }
 

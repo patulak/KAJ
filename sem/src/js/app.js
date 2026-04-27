@@ -71,7 +71,7 @@ for (let card of g.deck.cards) {
     }
 }*/
 
-console.log(g.deck.cards);
+//console.log(g.deck.cards);
 
 draw_grid()
 render_game(g);

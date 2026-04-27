@@ -10,6 +10,7 @@ export class Player {
         this.board = new PlayerBoard();
 
         this.id = 0;
+        this.phase = "place";
     }
 
     set_id(id) {

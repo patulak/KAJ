@@ -25,10 +25,9 @@ export class Game {
     }
 
     next_turn() {
-        this.current_player().draw_card(this.deck.draw_random_card());
+        //this.current_player().draw_card(this.deck.draw_random_normal_card()); //TODO for now, later choose
 
-        this.current_player_index =
-            (this.current_player_index + 1) % this.players.length;
+        this.current_player_index = (this.current_player_index + 1) % this.players.length;
 
         if (this.current_player_index === 0) {
             this.turn++;
@@ -44,9 +43,10 @@ export class Game {
             const starting_card = this.deck.draw_starting_card();
             player.board.place_card(starting_card, center_x, center_y, player.id, 0);
 
-            for (let i = 0; i < 3; i++) {
-                player.draw_card(this.deck.draw_random_card())
-            }
+
+            player.draw_card(this.deck.draw_random_normal_card())
+            player.draw_card(this.deck.draw_random_normal_card())
+            player.draw_card(this.deck.draw_random_golden_card())
         }
 
 

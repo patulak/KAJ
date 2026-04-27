@@ -1,3 +1,4 @@
+import { CARD_W, CARD_H } from "../settings.js";
 
 export class Colors {
     static red = "Red";
@@ -54,6 +55,13 @@ export class Card {
 
     get_score() {
         return this.points; //TODO calculate corners/symbols etc if placed 
+    }
+
+    get_corners_coords() {
+        if (!this.placed) {
+            return null;
+        }
+        return [{ x: this.x, y: this.y }, { x: this.x + CARD_W - 1, y: this.y }, { x: this.x + CARD_W - 1, y: this.y + CARD_H - 1 }, { x: this.x, y: this.y + CARD_H - 1 }]
     }
 }
 

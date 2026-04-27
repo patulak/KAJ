@@ -2,6 +2,8 @@
 import { UNIT, BOARD_W, BOARD_H, CARD_W, CARD_H } from "../settings.js";
 
 let turn_timeout = null;
+let switch_timeout = null;
+let card_draw_timeout = null;
 
 function render_header(game) {
     const players_bar = document.getElementById("players-bar");
@@ -31,21 +33,91 @@ function center_on_card(card) {
     });
 }
 
-function show_turn(player_name) {
+function show_turn(player_name, game, drawn_card) { //+next_turn
+
+    function show_name_and_switch() {
+        // show who playing
+        wait.textContent = `Playing: ${player_name}`;
+        wait.classList.add("visible");
+        clearTimeout(turn_timeout);
+        turn_timeout = setTimeout(() => {
+            wait.classList.remove("visible");
+        }, 2000);
+
+
+        // transtition switch to next player
+        view.classList.add("switching-players");
+        clearTimeout(switch_timeout);
+        switch_timeout = setTimeout(() => {
+            game.next_turn();
+            render_game(game);
+            view.classList.remove("switching-players");
+        }, 600);
+    }
+
+
     const wait = document.getElementById("turn-wait");
+    const view = document.getElementById("view-game");
 
-    wait.textContent = `Playing: ${player_name}`;
-    wait.classList.add("visible");
+    // store x,y.. render card in hand, apply transition from original x,y
+    const drawn_el = document.querySelector(`[data-card-id="${drawn_card.id}"]`);
+    let start_rect = null;
+    if (drawn_el) {
+        start_rect = drawn_el.getBoundingClientRect();
+    }
 
-    clearTimeout(turn_timeout);
+    render_hand(game);
 
-    turn_timeout = setTimeout(() => {
-        wait.classList.remove("visible");
-    }, 1200);
+    const hand_card = document.querySelector(`#player-hand-layer codex-card[data-card-id="${drawn_card.id}"]`);
+    if (hand_card && start_rect) {
+        const end_rect = hand_card.getBoundingClientRect();
+
+        const dx = end_rect.left - start_rect.left;
+        const dy = (end_rect.top - start_rect.bottom) / 2 - CARD_H * UNIT; //dont ask me.. this just works??
+
+        // start from old position
+        hand_card.style.transform = `translate(${-dx}px, ${dy}px) scale(1.1)`;
+        hand_card.style.zIndex = "1000";
+
+        // force reflow
+        hand_card.getBoundingClientRect();
+
+        // animate to normal position
+        hand_card.style.transition = "transform 1s ease";
+        hand_card.style.transform = "translate(0, 0) scale(1)";
+
+        hand_card.addEventListener("transitionend", () => {
+            hand_card.style.transition = "";
+            hand_card.style.zIndex = "";
+
+            show_name_and_switch();
+        }, { once: true });
+
+
+    }
+    else {
+        hand_card.classList.add("hand-card-enter");
+
+        setTimeout(() => {
+            hand_card.classList.add("visible");
+            clearTimeout(card_draw_timeout);
+            card_draw_timeout = setTimeout(() => {
+                hand_card.classList.remove("hand-card-enter");
+                hand_card.classList.remove("visible");
+                show_name_and_switch();
+            }, 750);
+        }, 250);
+
+    }
 
 
 
 
+}
+
+function toggle_draw_pile() {
+    const draw_layer = document.getElementById("draw-overlay");
+    draw_layer.classList.toggle("shown");
 }
 
 /*function is_visible(card) {
@@ -69,16 +141,152 @@ function show_turn(player_name) {
     );
 }*/
 
+export function render_draw_pile(game) {
+
+    function draw_and_refill(source, index = null) {
+        const player = game.current_player();
+
+        let drawn_card = null;
+
+        if (source === "normal_deck") {
+            drawn_card = game.deck.draw_random_normal_card();
+        } else if (source === "gold_deck") {
+            drawn_card = game.deck.draw_random_golden_card();
+        } else if (source === "shown_normal") {
+            drawn_card = game.deck.take_shown_normal_card(index);
+        } else if (source === "shown_golden") {
+            drawn_card = game.deck.take_shown_golden_card(index);
+        }
+
+        if (!drawn_card) return false;
+
+        player.draw_card(drawn_card);
+
+        game.current_player().phase = "place";
+
+        toggle_draw_pile();
+
+        return drawn_card;
+    }
+
+    const layer = document.getElementById("board-draw-layer");
+    layer.innerHTML = "";
+
+    layer.innerHTML = `
+        <div class="draw-section">
+            <h3>Normal cards</h3>
+            <div class="draw-row">
+                <button class="deck-button" data-source="normal_deck">
+                    Deck<br>
+                    ${game.deck.normal_cards.length} left
+                </button>
+
+                <div id="shown-normal-cards" class="shown-cards"></div>
+            </div>
+        </div>
+
+        <div class="draw-section">
+            <h3>Golden cards</h3>
+            <div class="draw-row">
+                <button class="deck-button gold" data-source="gold_deck">
+                    Deck<br>
+                    ${game.deck.golden_cards.length} left
+                </button>
+
+                <div id="shown-golden-cards" class="shown-cards"></div>
+            </div>
+        </div>
+    `;
+
+    const normal_container = document.getElementById("shown-normal-cards");
+    const golden_container = document.getElementById("shown-golden-cards");
+
+    game.deck.shown_normal_cards.forEach((card, index) => {
+        const el = document.createElement("codex-card");
+        el.set_card(card);
+        el.classList.add("draw-card");
+        el.dataset.source = "shown_normal";
+        el.dataset.index = index;
+
+        normal_container.appendChild(el);
+    });
+
+    game.deck.shown_golden_cards.forEach((card, index) => {
+        const el = document.createElement("codex-card");
+        el.set_card(card);
+        el.classList.add("draw-card");
+        el.dataset.source = "shown_golden";
+        el.dataset.index = index;
+
+        golden_container.appendChild(el);
+    });
+
+    /* events */
+    layer.querySelector('[data-source="normal_deck"]').addEventListener("click", () => {
+        let drawn_card = draw_and_refill("normal_deck");
+
+        //game.next_turn();
+        //render_game(game);
+        show_turn(game.current_player().name, game, drawn_card);
+    });
+
+    layer.querySelector('[data-source="gold_deck"]').addEventListener("click", () => {
+        let drawn_card = draw_and_refill("gold_deck");
+
+        //game.next_turn();
+        //render_game(game);
+        show_turn(game.current_player().name, game, drawn_card);
+    });
+
+    normal_container.querySelectorAll("codex-card").forEach((el) => {
+        el.addEventListener("click", () => {
+            const index = Number(el.dataset.index);
+            let drawn_card = draw_and_refill("shown_normal", index);
+
+            //game.next_turn();
+            //render_game(game);
+            show_turn(game.current_player().name, game, drawn_card);
+        });
+    });
+
+    golden_container.querySelectorAll("codex-card").forEach((el) => {
+        el.addEventListener("click", () => {
+            const index = Number(el.dataset.index);
+            let drawn_card = draw_and_refill("shown_golden", index);
+
+            //game.next_turn();
+            //render_game(game);
+            show_turn(game.current_player().name, game, drawn_card);
+        });
+    });
+}
+
+export function render_hand(game) {
+    const hand_layer = document.getElementById("player-hand-layer");
+    const current_player = game.current_player();
+    hand_layer.innerHTML = "";
+
+    current_player.hand.forEach((card, idx) => {
+        const card_el = document.createElement("codex-card");
+
+        card_el.set_card(card);
+
+        attach_drag(card_el, card, current_player.board, game, current_player);
+
+        hand_layer.appendChild(card_el);
+    })
+}
+
 export function render_board(game) {
     const current_player = game.current_player();
     const board = current_player.board;
 
     const board_container = document.getElementById("board-container");
     const layer = document.getElementById("board-cards-layer");
-    const hand_layer = document.getElementById("player-hand-layer");
+
 
     layer.innerHTML = "";
-    hand_layer.innerHTML = "";
+
 
     for (const card of board.placed_cards) {
         /*if (!is_visible(card)) { //must rerender on scroll
@@ -97,16 +305,6 @@ export function render_board(game) {
 
         layer.appendChild(card_el);
     }
-
-    current_player.hand.forEach((card, idx) => {
-        const card_el = document.createElement("codex-card");
-
-        card_el.set_card(card);
-
-        attach_drag(card_el, card, board, game, current_player);
-
-        hand_layer.appendChild(card_el);
-    })
 }
 
 function attach_drag(card_el, card, board, game, current_player) {
@@ -160,6 +358,80 @@ function attach_drag(card_el, card, board, game, current_player) {
         return false;
     }
 
+    function get_card_cells(x, y) {
+        const cells = [];
+        for (let dx = 0; dx < CARD_W; dx++) {
+            for (let dy = 0; dy < CARD_H; dy++) {
+                cells.push({
+                    x: x + dx,
+                    y: y + dy
+                });
+            }
+        }
+        return cells;
+    }
+
+    function is_on_valid_corner(x, y) {
+        /* NOTE: whoever tries to read or redo this will be hanged at the sunrise*/
+        function is_card_corner(card_x, card_y, cell_x, cell_y) {
+            return (
+                (cell_x === card_x && cell_y === card_y) ||
+                (cell_x === card_x + CARD_W - 1 && cell_y === card_y) ||
+                (cell_x === card_x + CARD_W - 1 && cell_y === card_y + CARD_H - 1) ||
+                (cell_x === card_x && cell_y === card_y + CARD_H - 1)
+            );
+        }
+
+        //not possible to place without covering an corner, so check only them
+        const corners = [{ x: x, y: y }, { x: x + CARD_W - 1, y: y }, { x: x + CARD_W - 1, y: y + CARD_H - 1 }, { x: x, y: y + CARD_H - 1 }];
+
+        let found_overlap = false;
+        let overlap_count = 0;
+
+        for (let card of board.placed_cards) {
+            const check_corners = card.get_corners_coords();
+            if (corners[0].x <= check_corners[1].x &&
+                corners[1].x >= check_corners[0].x &&
+                corners[0].y <= check_corners[2].y &&
+                corners[2].y >= check_corners[0].y
+            ) {
+                //console.log("COLIDING!");
+                for (let cell of get_card_cells(x, y)) {
+
+                    if (check_corners[0].x <= cell.x && cell.x <= check_corners[1].x &&
+                        check_corners[0].y <= cell.y && cell.y <= check_corners[2].y
+                    ) {
+                        overlap_count++;
+                        const is_placing_corner = is_card_corner(x, y, cell.x, cell.y);
+
+                        let is_placed_corner = false;
+                        let open_corner = false;
+
+                        let i = 0;
+                        for (let corn of check_corners) {
+                            //console.log(corn);
+                            if (corn.x == cell.x && corn.y == cell.y) {
+                                is_placed_corner = true;
+                                open_corner = card.corners[i] == 1;
+                            }
+                            i++;
+                        }
+                        //console.log(is_placed_corner, is_placing_corner, open_corner);
+                        //console.log(cell, card);
+                        if (!(is_placed_corner && is_placed_corner && open_corner)) {
+                            //console.log("FALSE");
+                            return false;
+                        }
+                        found_overlap = true;
+                    }
+                }
+            }
+        }
+        //console.log(corners);
+        //console.log("TRUE", found_overlap);
+        return found_overlap;
+    }
+
     function drag_release(event) { //for playing card
         if (!dragging) return;
         dragging = false;
@@ -173,13 +445,16 @@ function attach_drag(card_el, card, board, game, current_player) {
         const grid_x = Math.round(mouse_x / UNIT);
         const grid_y = Math.round(mouse_y / UNIT);
 
-        if (is_on_board(mouse_x, mouse_y)/* && TODO valid placement*/) {
+        if (is_on_board(mouse_x, mouse_y) && is_on_valid_corner(grid_x, grid_y) && current_player.phase == "place") {
             current_player.remove_from_hand(card);
             board.place_card(card, grid_x, grid_y, current_player.id, game.turn);
             current_player.score += card.get_score();
-            //TODO start drawing a card
-            game.next_turn()
-            show_turn(current_player.name);
+
+            current_player.phase = "draw";
+            toggle_draw_pile();
+
+            //game.next_turn()
+            //show_turn(current_player.name);
         }
         else {
             document.getElementById("player-hand-layer").appendChild(card_el);
@@ -197,6 +472,8 @@ function attach_drag(card_el, card, board, game, current_player) {
 export function render_game(game) {
     render_header(game);
     render_board(game);
+    render_hand(game);
+    render_draw_pile(game);
 
     const current_player = game.current_player();
     center_on_card(current_player.board.placed_cards[current_player.board.placed_cards.length - 1]);

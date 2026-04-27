@@ -10,6 +10,17 @@ codex-card {
     touch-action: none;
 }
 
+.hand-card-enter {
+    opacity: 0;
+    transform: translateY(40px) rotateY(90deg);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.hand-card-enter.visible {
+    opacity: 1;
+    transform: translateY(0) rotateY(0);
+}
+
 codex-card.dragging {
     cursor: grabbing;
     z-index: 1000;
@@ -78,8 +89,8 @@ codex-card .corner.back.active {
 /* Symbol */
 
 .symbol {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border: 1px solid black;
     border-radius: 50%;
     margin: auto;
