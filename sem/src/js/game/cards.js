@@ -38,6 +38,7 @@ export class Card {
         this.points = points;
 
         this.is_flipped = false;
+        this.fixed_symbols = [];
 
         this.x = null;
         this.y = null;
@@ -45,6 +46,7 @@ export class Card {
         this.in_hand = false;
         this.player_id = null;
         this.placed_turn = null;
+
 
         this.id = Card.current_id;
         Card.current_id += 1;

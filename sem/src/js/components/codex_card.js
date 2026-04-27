@@ -24,7 +24,7 @@ export class CodexCard extends HTMLElement {
             [Colors.purple]: "#8e63b7"
         };
 
-        const bg = map_colors[[this.card.color]] || "#999";
+        const bg = map_colors[[this.card.color]] || "#cccccc";
 
         const map_symbols = {
             [Symbols.red]: "#c85d4b",

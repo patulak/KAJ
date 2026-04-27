@@ -6,6 +6,8 @@ export class Deck {
         this.cards = [];
         this.not_drawed_cards = [];
         this.drawed_cards = [];
+        this.starting_cards = [];
+        this.drawed_starting_cards = [];
     }
 
     generate_deck() {
@@ -84,9 +86,6 @@ export class Deck {
                 current_color++;
             }
 
-
-
-
             last_color = color;
             overall++;
         }
@@ -110,10 +109,59 @@ export class Deck {
             [null, null, null, null],
             5,
             [Colors.green, Colors.green, Colors.green, Colors.green, Colors.green]));
+
+        for (let i = 0; i < this.cards.length; i++) {
+            this.not_drawed_cards.push(this.cards[i]);
+        }
+
+        this.generate_starting_cards();
+        this.generate_objectives();
+    }
+
+    generate_starting_cards() {
+        let card = new Card(null, [1, 1, 1, 1], [null, null, null, null], 0);
+        card.fixed_symbols = [Symbols.blue, Symbols.purple];
+        this.starting_cards.push(card);
+        card = new Card(null, [1, 1, 1, 1], [null, null, null, null], 0);
+        card.fixed_symbols = [Symbols.green, Symbols.red];
+        this.starting_cards.push(card);
+
+        card = new Card(null, [1, 1, 1, 1], [Symbols.blue, null, Symbols.red, null], 0);
+        card.fixed_symbols = [Symbols.red];
+        this.starting_cards.push(card);
+        card = new Card(null, [1, 1, 1, 1], [null, Symbols.green, null, Symbols.purple], 0);
+        card.fixed_symbols = [Symbols.purple];
+        this.starting_cards.push(card);
+
+        card = new Card(null, [1, 1, 0, 0], [null, null, null, null], 0);
+        card.fixed_symbols = [Symbols.red, Symbols.blue, Symbols.green];
+        this.starting_cards.push(card);
+        card = new Card(null, [1, 1, 0, 0], [null, null, null, null], 0);
+        card.fixed_symbols = [Symbols.purple, Symbols.blue, Symbols.green];
+        this.starting_cards.push(card);
+    }
+    generate_objectives() {
+
     }
 
     draw_random_card() {
+        if (this.not_drawed_cards.length === 0) {
+            return null;
+        }
+        const index = Math.floor(Math.random() * this.not_drawed_cards.length);
+        const cards = this.not_drawed_cards.splice(index, 1);
+        this.drawed_cards.push(cards[0]);
+        return cards[0];
+    }
 
+    draw_starting_card() {
+        if (this.starting_cards.length === 0) {
+            return null;
+        }
+        const index = Math.floor(Math.random() * this.starting_cards.length);
+        const cards = this.starting_cards.splice(index, 1);
+        this.drawed_starting_cards.push(cards[0]);
+        return cards[0];
     }
 
 

@@ -31,8 +31,11 @@ let g = new Game();
 g.add_player(p1);
 g.add_player(p2);
 
+g.prepare_game();
 
-let card1 = new Card(Colors.red, [0, 1, 1, 0], [null, Colors.red, Colors.blue, null], 0);
+
+
+/*let card1 = new Card(Colors.red, [0, 1, 1, 0], [null, Colors.red, Colors.blue, null], 0);
 let card2 = new Card(Colors.purple, [1, 1, 1, 0], [Colors.red, null, Colors.green, null], 1);
 let card3 = new GoldenCard(Colors.green, [0, 1, 1, 0], [null, null, null, null], 5, [Colors.green, Colors.green, Colors.green, Colors.green, Colors.green]);
 
@@ -49,11 +52,12 @@ g.players[1].draw_card(card6)
 //g.players[0].board.place_card(card3, 10, 5, p1.id, 3)
 g.players[0].draw_card(card3)
 
-g.turn = 3;
-
-g.deck.generate_deck();
+g.turn = 3;*/
 
 
+
+//draw all cards
+/*
 let i = 0;
 let x = 0;
 let y = 0;
@@ -65,7 +69,7 @@ for (let card of g.deck.cards) {
         x = 0;
         y += 4;
     }
-}
+}*/
 
 console.log(g.deck.cards);
 

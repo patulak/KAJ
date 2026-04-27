@@ -11,88 +11,90 @@
 </head>
 
 <body>
-    <header>
-        <h1>Codex Online</h1>
-        <flexbox>
-            <button id="menu-button">Menu</button>
-            <button id="setup-button">Setup</button>
-            <button id="rules-button">Show Rules</button>
-            <button id="game-button">Game</button>
-            <button id="results-button">Results</button>
-        </flexbox>
-    </header>
+    <div class="app">
+        <header class="app-header">
+            <h1>Codex Online</h1>
+            <flexbox>
+                <button id="menu-button">Menu</button>
+                <button id="setup-button">Setup</button>
+                <button id="rules-button">Show Rules</button>
+                <button id="game-button">Game</button>
+                <button id="results-button">Results</button>
+            </flexbox>
+        </header>
 
-    <main>
-        <section id="view-menu" hidden>TODO</section>
-        <section id="view-setup" hidden>TODO</section>
-        <section id="view-rules" hidden>TODO</section>
-        <section id="view-game">
+        <main class="app-main">
+            <section id="view-menu" hidden>TODO</section>
+            <section id="view-setup" hidden>TODO</section>
+            <section id="view-rules" hidden>TODO</section>
+            <section id="view-game">
 
-            <!-- Header -->
-            <header class="game-header">
-                <div id="players-bar">
-                    <div class="player active">
-                        Koláč - 12 Points
+                <!-- Header -->
+                <header class="game-header">
+                    <div id="players-bar">
+                        <div class="player active-player">
+                            Koláč - 12 Points
+                        </div>
+                        <div class="player">
+                            Pinki - 9 Points
+                        </div>
                     </div>
-                    <div class="player">
-                        Pinki - 9 Points
+
+                    <div id="turn-info">
+                        Turn: 3 | Koláč
                     </div>
+                    <div class="game-settings">
+                        <input type="checkbox" name="show-log">
+                        <label for="show-log">Show Log</label>
+                    </div>
+                </header>
+
+
+                <!-- Main -->
+                <div class="game-main">
+
+                    <!-- Board -->
+                    <div class="board-wrapper">
+                        <div id="board-viewport">
+                            <div id="board-container">
+                                <svg id="board-svg" viewBox="0 0 6000 3600" preserveAspectRatio="xMidYMid meet">
+                                    <rect x="0" y="0" width="6000" height="3600" fill="#f3efe6"></rect>
+
+                                    <g id="board-grid"></g>
+                                </svg>
+
+                                <div id="board-cards-layer"></div>
+                            </div>
+                            <div id="board-draw-layer">
+
+                            </div>
+                        </div>
+                        <!-- Hand -->
+                        <div id="player-hand-layer"></div>
+                        <div id="board-drag-layer"></div>
+                    </div>
+
+
+
+                    <!-- Side -->
+                    <aside class="side-panel" hidden>
+                        <h3>Log</h3>
+                        <div class="log">
+                            <div>Patrik placed a card</div>
+                            <div>Pinki draw a card</div>
+                        </div>
+                    </aside>
+
                 </div>
 
-                <div id="turn-info">
-                    Turn: 3 | Koláč
-                </div>
-                <div class="game-settings">
-                    <input type="checkbox" name="show-log">
-                    <label for="show-log">Show Log</label>
-                </div>
-            </header>
-
-
-            <!-- Main -->
-            <div class="game-main">
-
-                <!-- Board -->
-                <div class="board-wrapper">
-                    <div id="board-container">
-                        <svg id="board-svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid meet">
-                            <rect x="0" y="0" width="1600" height="1000" fill="#f3efe6"></rect>
-
-                            <g id="board-grid"></g>
-                        </svg>
-
-                        <div id="board-cards-layer"></div>
-                    </div>
-                    <div id="board-draw-layer">
-
-                    </div>
-                    <!-- Hand -->
-                    <div id="player-hand-layer">
-                        <codex-card></codex-card>
-                        <codex-card></codex-card>
-                        <codex-card></codex-card>
-                    </div>
-                </div>
 
 
 
-                <!-- Side -->
-                <aside class="side-panel" hidden>
-                    <h3>Log</h3>
-                    <div class="log">
-                        <div>Patrik placed a card</div>
-                        <div>Pinki draw a card</div>
-                    </div>
-                </aside>
-
-            </div>
-
-
-
-
-        </section>
-        <section id="view-results" hidden>TODO</section>
-    </main>
+            </section>
+            <section id="view-results" hidden>TODO</section>
+        </main>
+    </div>
+    <div id="turn-wait"></div>
 </body>
 
 <script type="module" src="js/components/codex_card.js"></script>

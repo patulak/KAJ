@@ -1,7 +1,8 @@
-import { UNIT, CARD_H, BOARD_W, BOARD_H } from "../settings.js"
+import { UNIT, CARD_H, CARD_W, BOARD_W, BOARD_H } from "../settings.js"
 
 export function draw_grid() {
-    let g_element = document.getElementById("board-grid")
+    const g_element = document.getElementById("board-grid");
+    g_element.innerHTML = "";
     for (let i = 0; i < BOARD_H; i += UNIT) {
         g_element.innerHTML += `<line x1="0" y1="${i}" x2="${BOARD_W}" y2="${i}" />`;
     }

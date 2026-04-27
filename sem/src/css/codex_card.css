@@ -123,3 +123,7 @@ codex-card .bl {
     bottom: 0px;
     left: 0px;
 }
+
+codex-card.dragging {
+    z-index: 1000;
+}
