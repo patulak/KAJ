@@ -459,17 +459,17 @@ function attach_drag(card_el, card, board, game, current_player) {
 
         const symbol_count = board.get_visible_symbols();
         let req = card.requirements;
-        if(req == null){
+        if (req == null) {
             req = true;
         }
-        else{
+        else {
             req = card.meet_requirements(symbol_count);
         }
 
         if (is_on_board(mouse_x, mouse_y) && result && current_player.phase == "place" && req) {
             current_player.remove_from_hand(card);
             board.place_card(card, grid_x, grid_y, current_player.id, game.turn);
-            current_player.score += card.get_score();
+            
             current_player.phase = "draw";
 
             for (let state of overlap_cards) {
@@ -479,6 +479,12 @@ function attach_drag(card_el, card, board, game, current_player) {
             //console.log(card);
 
             toggle_draw_pile();
+
+            current_player.score += card.get_score();
+            if (card.golden) {
+                const symbol_count_updated = board.get_visible_symbols();
+                current_player.score += card.get_special_score(symbol_count_updated);
+            }
 
             //game.next_turn()
             //show_turn(current_player.name);

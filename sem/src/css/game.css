@@ -66,6 +66,7 @@ body {
 .board-wrapper {
     flex: 1;
     min-height: 0;
+    padding: 20px;
 }
 
 #board-viewport {

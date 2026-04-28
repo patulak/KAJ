@@ -55,7 +55,7 @@ export class Card {
     }
 
     get_score() {
-        return this.points; //TODO calculate corners/symbols etc if placed 
+        return this.points;
     }
 
     get_corners_coords() {
@@ -76,8 +76,8 @@ export class GoldenCard extends Card {
         this.golden = true;
     }
 
-    meet_requirements(symbol_count) {
-        console.log(symbol_count);
+    meet_requirements(symbol_count_o) {
+        let symbol_count = new Map(symbol_count_o);
         for (const symbol of this.requirements) {
             let c = symbol_count.get(symbol);
             if (c > 0) {
@@ -88,5 +88,20 @@ export class GoldenCard extends Card {
             }
         }
         return true;
+    }
+
+    get_special_score(symbol_count) {
+        let score = 0;
+        if (this.per_special_symbol) {
+            score += symbol_count.get(this.special_symbol) * this.points;
+        }
+        if (this.per_corner) {
+            score += this.overlap_cards.length * this.points;
+        }
+        return score;
+    }
+
+    get_score() {
+        return (this.per_special_symbol || this.per_corner) ? 0 : this.points;
     }
 }
