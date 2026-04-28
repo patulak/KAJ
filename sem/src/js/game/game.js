@@ -42,6 +42,7 @@ export class Game {
         for (let player of this.players) {
             const starting_card = this.deck.draw_starting_card();
             player.board.place_card(starting_card, center_x, center_y, player.id, 0);
+            player.board.starting_card = starting_card;
 
 
             player.draw_card(this.deck.draw_random_normal_card())

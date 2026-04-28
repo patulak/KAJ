@@ -1,5 +1,6 @@
 import { Deck } from "./deck.js";
 import { UNIT, CARD_H, CARD_W } from "../settings.js"
+import { Symbols } from "./cards.js";
 
 export const CORNER_OFFSETS = {
     tl: { x: 0, y: 0 },
@@ -11,7 +12,8 @@ export const CORNER_OFFSETS = {
 export class PlayerBoard {
 
     constructor() {
-        this.placed_cards = []
+        this.placed_cards = [];
+        this.starting_card = null;
     }
 
     place_card(card, x, y, player_id = null, turn = null) {
@@ -48,17 +50,62 @@ export class PlayerBoard {
         };
     }
 
-    is_valid_placement() { }
+    get_visible_symbols() {
+        function str_to_num(str) {
+            switch (str) {
+                case "tl":
+                    return 0;
+                case "tr":
+                    return 1;
+                case "br":
+                    return 2;
+                case "bl":
+                    return 3;
 
-    get_visible_symbols() { }
+                default:
+                    return null;
+            }
+        }
 
-    get_possible_moves(card) { }
+        //TODO BFS from starting, marking visited
+        let visited = new Set();
+        let count = new Map();
+        for (const symbol of Symbols.all_symbols()) {
+            count.set(symbol, 0);
+        }
+        for (const symbol of this.starting_card.fixed_symbols) {
+            count.set(symbol, count.get(symbol) + 1);
+        }
 
-    draw_random_card() { }
+        let front = [this.starting_card];
 
-    get_showed_cards() { }
+        while (front.length >= 1) {
+            let card = front.shift();
+            if (visited.has(card.id)) {
+                continue;
+            }
+            visited.add(card.id);
 
-    draw_showed_card(card) { }
+            let banned_corners = [];
+            for (const conn of card.overlap_cards) {
+                front.push(conn.card);
+                if (card.placed_turn < conn.card.placed_turn) {
+                    banned_corners.push(str_to_num(conn.where))
+                }
+            }
+
+            for (let i = 0; i < card.symbols.length; i++) {
+                const symbol = card.symbols[i];
+                //not the overlaping ones
+                if (symbol != null && banned_corners.find(num => num == i) == undefined) {
+                    count.set(symbol, count.get(symbol) + 1);
+                }
+            }
+
+
+        }
+        return count;
+    }
 
 
 }

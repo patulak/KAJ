@@ -47,6 +47,7 @@ export class Card {
         this.in_hand = false;
         this.player_id = null;
         this.placed_turn = null;
+        this.overlap_cards = [];
 
 
         this.id = Card.current_id;
@@ -73,5 +74,19 @@ export class GoldenCard extends Card {
         this.special_symbol = special_symbol;
         this.per_corner = per_corner;
         this.golden = true;
+    }
+
+    meet_requirements(symbol_count) {
+        console.log(symbol_count);
+        for (const symbol of this.requirements) {
+            let c = symbol_count.get(symbol);
+            if (c > 0) {
+                symbol_count.set(symbol, c - 1);
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
     }
 }

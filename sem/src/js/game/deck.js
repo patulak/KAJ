@@ -197,7 +197,7 @@ export class Deck {
             return null;
         }
         let card = this.shown_golden_cards[index];
-        this.shown_golden_cards[index] = this.draw_random_normal_card();
+        this.shown_golden_cards[index] = this.draw_random_golden_card();
         return card;
     }
 

@@ -51,6 +51,7 @@ function show_turn(player_name, game, drawn_card) { //+next_turn
         switch_timeout = setTimeout(() => {
             game.next_turn();
             render_game(game);
+            game.current_player().phase = "place";
             view.classList.remove("switching-players");
         }, 600);
     }
@@ -161,8 +162,6 @@ export function render_draw_pile(game) {
         if (!drawn_card) return false;
 
         player.draw_card(drawn_card);
-
-        game.current_player().phase = "place";
 
         toggle_draw_pile();
 
@@ -313,6 +312,7 @@ function attach_drag(card_el, card, board, game, current_player) {
     let offset_y = 0;
 
     function drag_start(event) {
+        if (current_player.phase != "place") { return };
         dragging = true;
         card_el.classList.add("dragging");
 
@@ -331,7 +331,7 @@ function attach_drag(card_el, card, board, game, current_player) {
     }
 
     function drag_moving(event) {
-        if (!dragging) return;
+        if (!dragging || current_player.phase != "place") return;
 
         const board_rect = document.getElementById("board-drag-layer").getBoundingClientRect();
 
@@ -374,12 +374,13 @@ function attach_drag(card_el, card, board, game, current_player) {
     function is_on_valid_corner(x, y) {
         /* NOTE: whoever tries to read or redo this will be hanged at the sunrise*/
         function is_card_corner(card_x, card_y, cell_x, cell_y) {
-            return (
-                (cell_x === card_x && cell_y === card_y) ||
-                (cell_x === card_x + CARD_W - 1 && cell_y === card_y) ||
-                (cell_x === card_x + CARD_W - 1 && cell_y === card_y + CARD_H - 1) ||
-                (cell_x === card_x && cell_y === card_y + CARD_H - 1)
-            );
+
+            if (cell_x === card_x && cell_y === card_y) { return { result: true, where: "tl" } }
+            if (cell_x === card_x + CARD_W - 1 && cell_y === card_y) { return { result: true, where: "tr" } }
+            if (cell_x === card_x + CARD_W - 1 && cell_y === card_y + CARD_H - 1) { return { result: true, where: "br" } }
+            if (cell_x === card_x && cell_y === card_y + CARD_H - 1) { return { result: true, where: "bl" } }
+            return { result: false, where: "" }
+
         }
 
         //not possible to place without covering an corner, so check only them
@@ -387,6 +388,7 @@ function attach_drag(card_el, card, board, game, current_player) {
 
         let found_overlap = false;
         let overlap_count = 0;
+        let overlap_cards = [];
 
         for (let card of board.placed_cards) {
             const check_corners = card.get_corners_coords();
@@ -402,7 +404,9 @@ function attach_drag(card_el, card, board, game, current_player) {
                         check_corners[0].y <= cell.y && cell.y <= check_corners[2].y
                     ) {
                         overlap_count++;
-                        const is_placing_corner = is_card_corner(x, y, cell.x, cell.y);
+                        const corner_obj = is_card_corner(x, y, cell.x, cell.y);
+                        const is_placing_corner = corner_obj.result;
+                        const where_corner = corner_obj.where;
 
                         let is_placed_corner = false;
                         let open_corner = false;
@@ -423,17 +427,21 @@ function attach_drag(card_el, card, board, game, current_player) {
                             return false;
                         }
                         found_overlap = true;
+
+                        const original_obj = is_card_corner(card.x, card.y, cell.x, cell.y);
+                        overlap_cards.push({ card: card, where: where_corner, where_origin: original_obj.where });
                     }
                 }
             }
         }
         //console.log(corners);
         //console.log("TRUE", found_overlap);
-        return found_overlap;
+        return { result: found_overlap, overlap_cards: overlap_cards };
     }
 
     function drag_release(event) { //for playing card
         if (!dragging) return;
+
         dragging = false;
         card_el.classList.remove("dragging");
 
@@ -445,23 +453,39 @@ function attach_drag(card_el, card, board, game, current_player) {
         const grid_x = Math.round(mouse_x / UNIT);
         const grid_y = Math.round(mouse_y / UNIT);
 
-        if (is_on_board(mouse_x, mouse_y) && is_on_valid_corner(grid_x, grid_y) && current_player.phase == "place") {
+        const corner_obj = is_on_valid_corner(grid_x, grid_y);
+        const result = corner_obj.result;
+        const overlap_cards = corner_obj.overlap_cards;
+
+        const symbol_count = board.get_visible_symbols();
+        let req = card.requirements;
+        if(req == null){
+            req = true;
+        }
+        else{
+            req = card.meet_requirements(symbol_count);
+        }
+
+        if (is_on_board(mouse_x, mouse_y) && result && current_player.phase == "place" && req) {
             current_player.remove_from_hand(card);
             board.place_card(card, grid_x, grid_y, current_player.id, game.turn);
             current_player.score += card.get_score();
-
             current_player.phase = "draw";
+
+            for (let state of overlap_cards) {
+                card.overlap_cards.push({ card: state.card, where: state.where });
+                state.card.overlap_cards.push({ card: card, where: state.where_origin });
+            }
+            //console.log(card);
+
             toggle_draw_pile();
 
             //game.next_turn()
             //show_turn(current_player.name);
         }
-        else {
-            document.getElementById("player-hand-layer").appendChild(card_el);
-        }
         document.getElementById("board-drag-layer").innerHTML = "";
 
-        render_board(game);
+        render_game(game);
     }
 
     card_el.addEventListener("pointerdown", drag_start)
