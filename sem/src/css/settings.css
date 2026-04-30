@@ -4,4 +4,14 @@
     --card-h: 90px;
     --board-w: 6000px;
     --board-h: 3600px;
+
+    --c-lighter: #e8e1d2;
+    --c-light: #d8cfbd;
+    --c-normal: #8b7f69;
+    --c-dark: #2f2a24;
+
+    --c-board: #f3efe6;
+    --c-side: #e8e1d2;
+    --c-hand: #ddd;
+    --c-gold: #d6bc67;
 }

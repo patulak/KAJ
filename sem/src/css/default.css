@@ -1,0 +1,9 @@
+
+
+.app-main > section{
+    display: none;
+}
+
+.show-view{
+    display: flex !important;
+}

@@ -1,0 +1,33 @@
+.menu-container{
+    width: 100vw;
+    height: 100vh;
+    background: var(--c-light);
+}
+
+.menu-list{
+    width: 30%;
+    margin: auto;
+    padding-top: 200px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: center;
+}
+
+.menu-list button{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 48px;
+    background: var(--c-normal);
+    padding: 20px;
+    min-width: 450px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+    transition: transform 0.2s ease;
+}
+
+.menu-list button:hover{
+    transform: translateY(-5px);
+}

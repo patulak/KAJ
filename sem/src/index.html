@@ -7,6 +7,7 @@
     <title>Codex Online</title>
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/menu.css">
     <link rel="stylesheet" href="css/codex_card.css">
 </head>
 
@@ -24,10 +25,17 @@
         </header>
 
         <main class="app-main">
-            <section id="view-menu" hidden>TODO</section>
-            <section id="view-setup" hidden>TODO</section>
-            <section id="view-rules" hidden>TODO</section>
-            <section id="view-game">
+            <section id="view-menu">
+                <div class="menu-container">
+                    <div class="menu-list">
+                        <button id="play-button">Play</button>
+                        <button id="rules-button">Rules</button>
+                    </div>
+                </div>
+            </section>
+            <section id="view-setup">TODO</section>
+            <section id="view-rules">TODO</section>
+            <section id="view-game" class="show-view">
 
                 <!-- Header -->
                 <header class="game-header">
@@ -89,7 +97,7 @@
 
 
             </section>
-            <section id="view-results" hidden>TODO</section>
+            <section id="view-results">TODO</section>
         </main>
     </div>
     <div id="turn-wait"></div>

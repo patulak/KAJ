@@ -31,9 +31,8 @@ body {
 
 #view-game {
     height: 100%;
-    display: flex;
     flex-direction: column;
-    background: #e8e1d2;
+    background: var(--c-lighter);
     opacity: 1;
 
     transition: opacity 0.4s ease, filter 0.4s ease;
@@ -52,7 +51,7 @@ body {
     align-items: center;
     min-height: 72px;
     padding: 12px 20px;
-    background: #2f2a24;
+    background: var(--c-dark);
     color: white;
 }
 
@@ -74,8 +73,8 @@ body {
     height: 80%;
     overflow: auto;
     padding: 20px;
-    border: 2px solid #8b7f69;
-    background: #d8cfbd;
+    border: 2px solid var(--c-normal);
+    background: var(--c-light);
 }
 
 #board-container {
@@ -84,8 +83,8 @@ body {
     height: var(--board-h);
 
     margin: 0 auto;
-    border: 2px solid #8b7f69;
-    background: #f3efe6;
+    border: 2px solid var(--c-normal);
+    background: var(--c-board);
 }
 
 #board-svg {
@@ -120,7 +119,7 @@ body {
 
 #board-grid {
     opacity: 0.2;
-    stroke: #8a7f6b;
+    stroke: var(--c-normal);
     stroke-width: 1;
 }
 
@@ -155,7 +154,7 @@ body {
 
 .side-panel {
     width: 250px;
-    background: #e8e1d2;
+    background: var(--c-side);
     /*border-left: 1px solid #ccc;*/
     padding: 10px;
     display: flex;
@@ -167,7 +166,7 @@ body {
 
 .player-hand {
     height: 140px;
-    background: #ddd;
+    background: var(--c-hand);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -200,8 +199,8 @@ body {
 }
 
 .draw-modal {
-    background: #f3efe6;
-    border: 2px solid #8b7f69;
+    background: var(--c-light);
+    border: 2px solid var(--c-normal);
     border-radius: 16px;
 
     padding: 20px;
@@ -242,12 +241,12 @@ body {
     height: 120px;
     border-radius: 12px;
     border: 2px solid #333;
-    background: #ddd3bd;
+    background: var(--c-hand);
     cursor: pointer;
 }
 
 .deck-button.gold {
-    background: #d6bc67;
+    background: var(--c-gold);
 }
 
 #board-draw-layer codex-card {
@@ -261,7 +260,7 @@ body {
     top: 50%;
     left: 50%;
     z-index: 999;
-    background: #2f2a24;
+    background: var(--c-dark);
     color: white;
     padding: 12px 24px;
     border-radius: 999px;
