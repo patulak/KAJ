@@ -1,10 +1,12 @@
-.menu-container{
+
+
+.menu-container {
     width: 100vw;
     height: 100vh;
     background: var(--c-light);
 }
 
-.menu-list{
+.menu-list {
     width: 30%;
     margin: auto;
     padding-top: 200px;
@@ -16,8 +18,9 @@
     align-content: center;
 }
 
-.menu-list button{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.menu-list button {
+    font-family: Changa_One;
+    font-weight: 500;
     font-size: 48px;
     background: var(--c-normal);
     padding: 20px;
@@ -28,6 +31,6 @@
     transition: transform 0.2s ease;
 }
 
-.menu-list button:hover{
+.menu-list button:hover {
     transform: translateY(-5px);
 }

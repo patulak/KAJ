@@ -1,9 +1,11 @@
+* {
+    font-family: Changa_One;
+}
 
-
-.app-main > section{
+.app-main>section {
     display: none;
 }
 
-.show-view{
+.show-view {
     display: flex !important;
 }

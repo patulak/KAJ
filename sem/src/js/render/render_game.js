@@ -469,7 +469,7 @@ function attach_drag(card_el, card, board, game, current_player) {
         if (is_on_board(mouse_x, mouse_y) && result && current_player.phase == "place" && req) {
             current_player.remove_from_hand(card);
             board.place_card(card, grid_x, grid_y, current_player.id, game.turn);
-            
+
             current_player.phase = "draw";
 
             for (let state of overlap_cards) {

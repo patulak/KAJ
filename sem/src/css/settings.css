@@ -15,3 +15,8 @@
     --c-hand: #ddd;
     --c-gold: #d6bc67;
 }
+
+@font-face {
+    font-family: Changa_One;
+    src: url('../fonts/Changa_One/ChangaOne-Regular.ttf');
+}
