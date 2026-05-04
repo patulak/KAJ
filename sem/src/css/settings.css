@@ -14,9 +14,15 @@
     --c-side: #e8e1d2;
     --c-hand: #ddd;
     --c-gold: #d6bc67;
+
+    
+}
+* {
+    box-sizing: border-box;
 }
 
 @font-face {
     font-family: Changa_One;
+    font-weight: 100;
     src: url('../fonts/Changa_One/ChangaOne-Regular.ttf');
 }

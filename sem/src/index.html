@@ -36,29 +36,48 @@
                 </div>
             </section>
             <section id="view-setup">TODO</section>
-            <section id="view-rules">
-                <div class="rules-container">
-                    <img src="sources/rules1.png" class="current-show">
-                    <img src="sources/rules2.png">
-                    <img src="sources/rules3.png">
+            <section id="view-rules" class="show-view">
+                <div class="rules-page">
+                    <div class="written-rules">
+                        <h2>Game Flow</h2>
+                        <p>Players take turns. In each turn, a player places one card and draws one from the draw piles.
+                        </p>
+
+                        <h2>Objective</h2>
+                        <p>Players aim to score as many points as possible. When a player reaches 20 points, the final
+                            round
+                            is played and the game ends.</p>
+
+                        <h2>Placing Cards</h2>
+                        <p>Cards can only be placed by overlapping open corners.</p>
+                        <p>Golden cards can only be placed if the player has the required number of symbols.</p>
+                    </div>
+                    <div class="original-rules">
+                        <h2>Original game excerpt:</h2>
+                        <div class="rules-container">
+                            <button id="rules-prev">&lt</button>
+                            <div class="rules-images">
+                                <img src="sources/rules1.png" class="current-show">
+                                <img src="sources/rules2.png">
+                                <img src="sources/rules3.png">
+                            </div>
+                            <button id="rules-next">&gt</button>
+
+
+                        </div>
+                    </div>
                 </div>
             </section>
-            <section id="view-game" class="show-view">
+            <section id="view-game">
 
                 <!-- Header -->
                 <header class="game-header">
                     <div id="players-bar">
-                        <div class="player active-player">
-                            Koláč - 12 Points
-                        </div>
-                        <div class="player">
-                            Pinki - 9 Points
-                        </div>
+                        <div class="player active-player"></div>
+                        <div class="player"></div>
                     </div>
 
-                    <div id="turn-info">
-                        Turn: 3 | Koláč
-                    </div>
+                    <div id="turn-info"></div>
                     <div class="game-settings">
                         <input type="checkbox" name="show-log">
                         <label for="show-log">Show Log</label>
