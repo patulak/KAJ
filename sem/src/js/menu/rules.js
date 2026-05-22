@@ -1,22 +1,51 @@
+import { show_view } from "../tools/tools.js";
+
 
 const prev = document.getElementById("rules-prev");
 const next = document.getElementById("rules-next");
+const back = document.getElementById("rules-back");
 
-function swap_image(event, direction) {
-    const images = document.querySelectorAll(".rules-images img");
-    let original_i = 0;
-    for (let i = 0; i < images.length; i++) {
-        if (images[i].classList.contains("current-show")) {
-            original_i = i;
-            images[i].classList.remove("current-show");
-            break;
+const images = document.querySelectorAll(".rules-images img");
+let current_index = 0;
+
+function update_rules_images(direction = "next") {
+    images.forEach((img, index) => {
+        img.classList.remove(
+            "current-show",
+            "slide-left",
+            "slide-right",
+            "hidden-left",
+            "hidden-right"
+        );
+
+        if (index === current_index) {
+            img.classList.add("current-show");
         }
-    }
-    original_i = direction == "back" ? original_i - 1 : original_i + 1;
-    original_i = (original_i + images.length) % images.length;
-    images[original_i].classList.add("current-show");
-    console.log(original_i);
+        else if (index === (current_index - 1 + images.length) % images.length) {
+            img.classList.add("hidden-left");
+        }
+        else if (index === (current_index + 1) % images.length) {
+            img.classList.add("hidden-right");
+        }
+    });
 }
 
-prev.addEventListener("click", (event) => swap_image(event, "next"));
-next.addEventListener("click", (event) => swap_image(event, "back"));
+function swap_image(direction) {
+    if (direction === "next") {
+        current_index = (current_index + 1) % images.length;
+    }
+    else {
+        current_index = (current_index - 1 + images.length) % images.length;
+    }
+
+    update_rules_images(direction);
+}
+
+prev.addEventListener("click", () => swap_image("back"));
+next.addEventListener("click", () => swap_image("next"));
+
+back.addEventListener("click", () => {
+    show_view("menu");
+});
+
+update_rules_images();

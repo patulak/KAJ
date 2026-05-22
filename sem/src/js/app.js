@@ -4,7 +4,7 @@ import { Player } from "./game/player.js";
 import { render_game } from "./render/render_game.js";
 import { draw_grid } from "./render/render_grid.js";
 import { show_view } from "./tools/tools.js"
-
+import { init_setup } from "./menu/setup.js";
 
 const menu = document.getElementById("menu-button");
 const rules = document.getElementById("rules-button");
@@ -20,18 +20,19 @@ results.addEventListener("click", (event) => { show_view("results") })
 
 
 
-
-
-
-
-let p1 = new Player("kolac", Colors.red)
-let p2 = new Player("pinki", Colors.blue)
-
 let g = new Game();
-g.add_player(p1);
-g.add_player(p2);
 
-g.prepare_game();
+init_setup((username) => {
+    let player = new Player(username, Colors.all_colors()[g.players.length]);
+    g.add_player(player);
+    console.log(player);
+}, () => {
+    show_view("game");
+    g.prepare_game();
+    draw_grid()
+    render_game(g);
+    console.log("GAME", g);
+})
 
 
 
@@ -73,5 +74,3 @@ for (let card of g.deck.cards) {
 
 //console.log(g.deck.cards);
 
-draw_grid()
-render_game(g);

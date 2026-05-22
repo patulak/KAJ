@@ -14,7 +14,7 @@ function render_header(game) {
         players_bar.innerHTML += `<div class="player${game.current_player_index == player.id ? " active" : ""}">[${player.id}] ${player.name} ... ${player.get_score()}</div>`
     }
 
-    turn_info.textContent = `Turn: ${game.turn}`;
+    turn_info.innerHTML = `Turn: ${game.turn}<br>Playing: ${game.current_player().name}`;
 }
 
 function center_on_card(card) {

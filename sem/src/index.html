@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/game.css">
     <link rel="stylesheet" href="css/menu.css">
     <link rel="stylesheet" href="css/rules.css">
+    <link rel="stylesheet" href="css/setup.css">
     <link rel="stylesheet" href="css/codex_card.css">
 </head>
 
@@ -17,17 +18,17 @@
     <div class="app">
         <header class="app-header">
             <h1>Codex Online</h1>
-            <flexbox>
-                <button id="menu-button">Menu</button>
+            <div>
+                <button id="menu-button" class="selected">Menu</button>
                 <button id="setup-button">Setup</button>
                 <button id="rules-button">Show Rules</button>
                 <button id="game-button">Game</button>
                 <button id="results-button">Results</button>
-            </flexbox>
+            </div>
         </header>
 
         <main class="app-main">
-            <section id="view-menu">
+            <section id="view-menu" class="show-view">
                 <div class="menu-container">
                     <div class="menu-list">
                         <button class="menu-play-button">Play</button>
@@ -35,8 +36,18 @@
                     </div>
                 </div>
             </section>
-            <section id="view-setup">TODO</section>
-            <section id="view-rules" class="show-view">
+            <section id="view-setup">
+                <form id="setup-form">
+                    <label for="setup-player-count">Player Selection</label>
+                    <input type="number" id="setup-player-count" name="player-count" value="1" min="1" max="4">
+                    <div>
+                        <input type="text" name="setup-usernames[]" placeholder="Player1">
+                    </div>
+                    <input type="submit" value="Play">
+                </form>
+
+            </section>
+            <section id="view-rules">
                 <div class="rules-page">
                     <div class="written-rules">
                         <h2>Game Flow</h2>
@@ -55,16 +66,19 @@
                     <div class="original-rules">
                         <h2>Original game excerpt:</h2>
                         <div class="rules-container">
-                            <button id="rules-prev">&lt</button>
-                            <div class="rules-images">
-                                <img src="sources/rules1.png" class="current-show">
-                                <img src="sources/rules2.png">
-                                <img src="sources/rules3.png">
+                            <button id="rules-prev" class="rules-arrow">&lt;</button>
+
+                            <div class="rules-stage">
+                                <div class="rules-images">
+                                    <img alt="Rules" src="sources/rules1.png" class="current-show">
+                                    <img alt="Rules" src="sources/rules2.png">
+                                    <img alt="Rules" src="sources/rules3.png">
+                                </div>
                             </div>
-                            <button id="rules-next">&gt</button>
 
-
+                            <button id="rules-next" class="rules-arrow">&gt;</button>
                         </div>
+                        <button id="rules-back">Back</button>
                     </div>
                 </div>
             </section>
@@ -79,8 +93,6 @@
 
                     <div id="turn-info"></div>
                     <div class="game-settings">
-                        <input type="checkbox" name="show-log">
-                        <label for="show-log">Show Log</label>
                     </div>
                 </header>
 
@@ -133,6 +145,7 @@
 <script type="module" src="js/components/codex_card.js"></script>
 <script type="module" src="js/app.js"></script>
 <script type="module" src="js/menu/menu.js"></script>
+<script type="module" src="js/menu/setup.js"></script>
 <script type="module" src="js/menu/rules.js"></script>
 
 

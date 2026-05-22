@@ -1,3 +1,7 @@
+Webová aplikace inspirovaná deskovou hrou Codex Naturalis pro 2–4 hráče (střídání u jednoho zařízení). Hráči pokládají karty podle pravidel, sbírají body a plní cíle. Aplikace bude kontrolovat validitu tahů, počítat body a vyhodnotí výsledek hry.
+
+Bude obsahovat menu, nastavení hráčů, herní obrazovku s plánem (SVG).
+
 normal cards:
     per color:
         4 basic (2 symbols, 3 open corners)
