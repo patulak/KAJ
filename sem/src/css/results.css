@@ -20,7 +20,6 @@
     background: var(--c-light);
     border: 10px solid var(--c-gold);
     border-radius: 22px;
-
     box-shadow: 0 16px 45px rgba(0, 0, 0, 0.35);
 
     animation: winner-pop 0.8s ease;
@@ -29,8 +28,6 @@
 .winner-card .winner-label {
     font-size: 18px;
     font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
 }
 
 .winner-card h2 {
@@ -46,10 +43,9 @@
 
 .results-grid {
     width: min(900px, 100%);
-
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 18px;
+    gap: 20px;
 }
 
 .player-result {
@@ -60,43 +56,24 @@
     border-radius: 18px;
 
     text-align: center;
-
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-
-    animation: result-slide-in 0.45s ease both;
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
 }
 
-.player-result:hover {
-    transform:
-        perspective(900px)
-        rotateX(5deg)
-        rotateY(-5deg)
-        scale(1.04);
-
-    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
-}
-
-.player-result.first-place {
+.player-result:first-child {
     border-color: var(--c-gold);
-    background: linear-gradient(
-        135deg,
-        var(--c-lighter),
-        var(--c-gold)
-    );
+    background: linear-gradient(135deg,
+            var(--c-lighter),
+            var(--c-gold));
 }
 
 .player-rank {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
 }
 
 .player-result h3 {
     margin: 10px 0;
-    font-size: 28px;
+    font-size: 30px;
 }
 
 .player-result p {
@@ -117,14 +94,68 @@
     }
 }
 
-@keyframes result-slide-in {
-    from {
-        opacity: 0;
-        transform: translateY(35px);
+.history-list {
+    width: min(900px, 100%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.history-game {
+    padding: 18px;
+
+    background: var(--c-light);
+    border: 6px solid var(--c-normal);
+    border-radius: 18px;
+
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+
+    h3 {
+        margin: 0;
+        font-size: 24px;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .history-date {
+        margin: 4px 0 12px 0;
+        opacity: 0.75;
     }
+}
+
+.history-players {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-player {
+    display: grid;
+    grid-template-columns: 50px 1fr 80px;
+    align-items: center;
+
+    padding: 10px 12px;
+
+    background: var(--c-lighter);
+    border: 3px solid var(--c-normal);
+    border-radius: 10px;
+}
+
+.empty-history {
+    font-size: 20px;
+    opacity: 0.8;
+}
+
+#clear-results-button {
+    padding: 10px 24px;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    color: var(--c-lighter);
+    background: var(--c-dark);
+
+    border: 4px solid var(--c-normal);
+    border-radius: 12px;
+
+    cursor: pointer;
 }

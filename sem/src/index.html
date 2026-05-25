@@ -30,6 +30,7 @@
 
         <main class="app-main">
             <section id="view-menu" class="show-view">
+                <h2>MENU</h2>
                 <div class="menu-container">
                     <div class="menu-list">
                         <button class="menu-play-button">Play</button>
@@ -38,9 +39,11 @@
                 </div>
             </section>
             <section id="view-setup">
+                <h2>SETUP</h2>
                 <form id="setup-form">
                     <label for="setup-player-count">Player Selection</label>
-                    <input type="number" id="setup-player-count" name="player-count" value="1" min="1" max="4">
+                    <input type="number" id="setup-player-count" name="player-count" value="1" min="1" max="4"
+                        autofocus>
                     <div>
                         <input type="text" name="setup-usernames[]" placeholder="Player1">
                     </div>
@@ -49,6 +52,7 @@
 
             </section>
             <section id="view-rules">
+                <h2>RULES</h2>
                 <div class="rules-page">
                     <div class="written-rules">
                         <h2>Game Flow</h2>
@@ -84,10 +88,10 @@
                 </div>
             </section>
             <section id="view-game">
-
                 <!-- Header -->
                 <header class="game-header">
                     <div id="players-bar">
+                        <h3>Leaderboard</h3>
                         <div class="player active-player"></div>
                         <div class="player"></div>
                     </div>
@@ -138,21 +142,31 @@
 
             </section>
             <section id="view-results">
+                <h2>RESULTS</h2>
                 <div class="winner-card">
+                    No Winner yet!
                 </div>
                 <div class="results-grid">
                 </div>
+
+                <h2>Previous Results</h2>
+                <div class="history-list">
+
+                </div>
+                <button id="clear-results-button">Clear History</button>
             </section>
         </main>
     </div>
     <div id="turn-wait"></div>
+
+    <script type="module" src="js/components/codex_card.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/menu/menu.js"></script>
+    <script type="module" src="js/menu/setup.js"></script>
+    <script type="module" src="js/menu/rules.js"></script>
 </body>
 
-<script type="module" src="js/components/codex_card.js"></script>
-<script type="module" src="js/app.js"></script>
-<script type="module" src="js/menu/menu.js"></script>
-<script type="module" src="js/menu/setup.js"></script>
-<script type="module" src="js/menu/rules.js"></script>
+
 
 
 </html>

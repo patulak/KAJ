@@ -29,6 +29,10 @@ export class Game {
         return this.players[this.current_player_index];
     }
 
+    next_player() {
+        return this.players[(this.current_player_index + 1) % this.players.length];
+    }
+
     next_turn() {
         //this.current_player().draw_card(this.deck.draw_random_normal_card()); //TODO for now, later choose
         for (let player of this.players) {
@@ -49,6 +53,7 @@ export class Game {
 
     end_game() {
         this.phase = 2;
+        this.save_game_result();
         render_results(this);
         show_view("results");
     }
@@ -72,4 +77,23 @@ export class Game {
         this.phase = 1;
     }
 
+
+
+    save_game_result() {
+        const saved = localStorage.getItem("codex-results-history");
+        const history_data = saved ? JSON.parse(saved) : [];
+        const result = {
+            date: new Date().toISOString(),
+
+            players: this.players.map(player => ({
+                name: player.name,
+                color: player.color,
+                score: player.score
+            }))
+        };
+
+        result.players.sort((a, b) => b.score - a.score);
+        history_data.unshift(result);
+        localStorage.setItem("codex-results-history", JSON.stringify(history_data));
+    }
 }

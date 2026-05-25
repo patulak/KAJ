@@ -226,7 +226,7 @@ export function render_draw_pile(game) {
 
         //game.next_turn();
         //render_game(game);
-        show_turn(game.current_player().name, game, drawn_card);
+        show_turn(game.next_player().name, game, drawn_card);
     });
 
     layer.querySelector('[data-source="gold_deck"]').addEventListener("click", () => {
@@ -234,7 +234,7 @@ export function render_draw_pile(game) {
 
         //game.next_turn();
         //render_game(game);
-        show_turn(game.current_player().name, game, drawn_card);
+        show_turn(game.next_player().name, game, drawn_card);
     });
 
     normal_container.querySelectorAll("codex-card").forEach((el) => {
@@ -244,7 +244,7 @@ export function render_draw_pile(game) {
 
             //game.next_turn();
             //render_game(game);
-            show_turn(game.current_player().name, game, drawn_card);
+            show_turn(game.next_player().name, game, drawn_card);
         });
     });
 
@@ -255,7 +255,7 @@ export function render_draw_pile(game) {
 
             //game.next_turn();
             //render_game(game);
-            show_turn(game.current_player().name, game, drawn_card);
+            show_turn(game.next_player().name, game, drawn_card);
         });
     });
 }

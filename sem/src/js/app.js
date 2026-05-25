@@ -3,8 +3,11 @@ import { Game } from "./game/game.js";
 import { Player } from "./game/player.js";
 import { render_game } from "./render/render_game.js";
 import { draw_grid } from "./render/render_grid.js";
-import { show_view } from "./tools/tools.js"
+import { show_view, handle_route, navigate_to } from "./tools/tools.js"
 import { init_setup } from "./menu/setup.js";
+import { render_results } from "./render/render_results.js";
+
+let g = new Game();
 
 const menu = document.getElementById("menu-button");
 const rules = document.getElementById("rules-button");
@@ -12,26 +15,51 @@ const setup = document.getElementById("setup-button");
 const game = document.getElementById("game-button");
 const results = document.getElementById("results-button");
 
-menu.addEventListener("click", (event) => { show_view("menu") })
-rules.addEventListener("click", (event) => { show_view("rules") })
-setup.addEventListener("click", (event) => { show_view("setup") })
-game.addEventListener("click", (event) => { show_view("game") })
-results.addEventListener("click", (event) => { show_view("results") })
+
+menu.addEventListener("click", (event) => { navigate_to("menu") })
+rules.addEventListener("click", (event) => { navigate_to("rules") })
+setup.addEventListener("click", (event) => { navigate_to("setup") })
+game.addEventListener("click", (event) => { navigate_to("game") })
+results.addEventListener("click", (event) => { navigate_to("results") })
 
 
+function get_view_from_url() {
+    return location.hash.replace("#", "") || "menu";
+}
 
-let g = new Game();
+const start_view = get_view_from_url();
+
+history.replaceState({ view: start_view }, "", `#${start_view}`);
+show_view(start_view);
+
+window.addEventListener("popstate", (event) => {
+    const view = event.state?.view ?? "menu";
+    show_view(view);
+});
+window.addEventListener("hashchange", handle_route);
+window.addEventListener("load", handle_route);
+
+const clear_button = document.getElementById("clear-results-button");
+clear_button.addEventListener("click", () => {
+    if (!confirm("Delete all saved results?")) {
+        return;
+    }
+    localStorage.removeItem("codex-results-history");
+    render_results(g);
+});
+
+window.game = g; //debug in console
 
 init_setup((username) => {
     let player = new Player(username, Colors.all_colors()[g.players.length]);
     g.add_player(player);
-    console.log(player);
+    //console.log(player);
 }, () => {
     show_view("game");
     g.prepare_game();
     draw_grid()
     render_game(g);
-    console.log("GAME", g);
+    //console.log("GAME", g);
 })
 
 
