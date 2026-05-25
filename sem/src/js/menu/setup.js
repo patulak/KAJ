@@ -31,15 +31,18 @@ player_count.addEventListener("change", () => {
     }
 });
 
-export function init_setup(add_player, on_finish){
+export function init_setup(add_player, on_finish) {
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
         const data = new FormData(form);
         const usernames = data.getAll("setup-usernames[]");
 
-        for(let username of usernames){
-            add_player(username);
+        for (let i = 0; i < usernames.length; i++) {
+            if (usernames[i] == "") {
+                usernames[i] = `Player${i + 1}`;
+            }
+            add_player(usernames[i]);
         }
         on_finish();
     });

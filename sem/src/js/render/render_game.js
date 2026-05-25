@@ -312,7 +312,7 @@ function attach_drag(card_el, card, board, game, current_player) {
     let offset_y = 0;
 
     function drag_start(event) {
-        if (current_player.phase != "place") { return };
+        if (current_player.phase != "place" || game.phase == 2) { return };
         dragging = true;
         card_el.classList.add("dragging");
 

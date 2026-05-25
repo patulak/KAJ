@@ -1,0 +1,130 @@
+#view-results {
+    min-height: calc(100vh - 72px);
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+
+    background: var(--c-light);
+    color: var(--c-dark);
+}
+
+.winner-card {
+    width: min(420px, 90vw);
+    padding: 28px;
+
+    text-align: center;
+
+    background: var(--c-light);
+    border: 10px solid var(--c-gold);
+    border-radius: 22px;
+
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.35);
+
+    animation: winner-pop 0.8s ease;
+}
+
+.winner-card .winner-label {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.winner-card h2 {
+    margin: 10px 0;
+    font-size: 42px;
+}
+
+.winner-card p {
+    margin: 0;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.results-grid {
+    width: min(900px, 100%);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+}
+
+.player-result {
+    padding: 20px;
+
+    background: var(--c-lighter);
+    border: 6px solid var(--c-normal);
+    border-radius: 18px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+
+    animation: result-slide-in 0.45s ease both;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.player-result:hover {
+    transform:
+        perspective(900px)
+        rotateX(5deg)
+        rotateY(-5deg)
+        scale(1.04);
+
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
+}
+
+.player-result.first-place {
+    border-color: var(--c-gold);
+    background: linear-gradient(
+        135deg,
+        var(--c-lighter),
+        var(--c-gold)
+    );
+}
+
+.player-rank {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.player-result h3 {
+    margin: 10px 0;
+    font-size: 28px;
+}
+
+.player-result p {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@keyframes winner-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.75) rotateX(20deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotateX(0);
+    }
+}
+
+@keyframes result-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
