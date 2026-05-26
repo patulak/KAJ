@@ -1,7 +1,6 @@
 export function show_view(view_name) { //this switch view
   
   document.querySelectorAll("main > section").forEach(section => {
-    console.log("show:", section);
     if (section.classList.contains("show-view")) {
       section.classList.remove("show-view");
     }
