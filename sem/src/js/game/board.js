@@ -67,7 +67,7 @@ export class PlayerBoard {
             }
         }
 
-        //TODO BFS from starting, marking visited
+        // BFS from starting, marking visited
         let visited = new Set();
         let count = new Map();
         for (const symbol of Symbols.all_symbols()) {

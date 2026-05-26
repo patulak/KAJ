@@ -2,6 +2,7 @@
     /*border: 20px solid var(--c-normal);*/
     background: var(--c-light);
     height: 100%;
+    flex-direction: column;
 }
 
 #setup-form {

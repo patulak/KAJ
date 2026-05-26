@@ -1,5 +1,7 @@
+
 #view-rules {
     max-height: 100%;
+    flex-direction: column;
 }
 
 .rules-page {

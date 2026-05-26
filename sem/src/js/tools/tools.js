@@ -1,5 +1,7 @@
-export function show_view(view_name) {
+export function show_view(view_name) { //this switch view
+  
   document.querySelectorAll("main > section").forEach(section => {
+    console.log("show:", section);
     if (section.classList.contains("show-view")) {
       section.classList.remove("show-view");
     }
@@ -19,7 +21,7 @@ export function show_view(view_name) {
   //app_state.current_view = view_name;
 }
 
-export function navigate_to(view_name) {
+export function navigate_to(view_name) { //this changes url and switches
     history.pushState({ view: view_name }, "", `#${view_name}`);
     show_view(view_name);
 }

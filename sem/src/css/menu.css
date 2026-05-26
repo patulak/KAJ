@@ -1,9 +1,12 @@
 
+#view-menu {
+    flex-direction: column;
+}
 
 .menu-container {
     width: 100vw;
     height: 100vh;
-    background: var(--c-light);
+    background: var(--c-light);    
 }
 
 .menu-list {

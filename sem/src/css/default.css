@@ -1,5 +1,5 @@
 * {
-    font-family: Changa_One;
+    font-family: Changa_One; /* https://fonts.google.com/selection?preview.script=Latn */
 }
 
 .app-main>section {
@@ -51,5 +51,18 @@
         button.selected {
            color: var(--c-lighter); 
         }
+    }
+}
+
+section {
+    background: var(--c-normal);
+    margin: 0;
+    padding: 0;
+
+    & > h2 {
+        align-self: center;
+        font-size: 32px;
+        padding: 5px 5px 0 0;
+        margin: 5px;
     }
 }

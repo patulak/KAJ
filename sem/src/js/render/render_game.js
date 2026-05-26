@@ -33,7 +33,7 @@ function center_on_card(card) {
     });
 }
 
-function show_turn(player_name, game, drawn_card) { //+next_turn
+function show_turn(player_name, game, drawn_card) {
 
     function show_name_and_switch() {
         // show who playing
@@ -45,7 +45,7 @@ function show_turn(player_name, game, drawn_card) { //+next_turn
         }, 2000);
 
 
-        // transtition switch to next player
+        // switch to next player
         view.classList.add("switching-players");
         clearTimeout(switch_timeout);
         switch_timeout = setTimeout(() => {
@@ -60,7 +60,7 @@ function show_turn(player_name, game, drawn_card) { //+next_turn
     const wait = document.getElementById("turn-wait");
     const view = document.getElementById("view-game");
 
-    // store x,y.. render card in hand, apply transition from original x,y
+    // store x,y.. render card in hand, apply transitions
     const drawn_el = document.querySelector(`[data-card-id="${drawn_card.id}"]`);
     let start_rect = null;
     if (drawn_el) {
@@ -76,14 +76,9 @@ function show_turn(player_name, game, drawn_card) { //+next_turn
         const dx = end_rect.left - start_rect.left;
         const dy = (end_rect.top - start_rect.bottom) / 2 - CARD_H * UNIT; //dont ask me.. this just works??
 
-        // start from old position
         hand_card.style.transform = `translate(${-dx}px, ${dy}px) scale(1.1)`;
         hand_card.style.zIndex = "1000";
 
-        // force reflow
-        hand_card.getBoundingClientRect();
-
-        // animate to normal position
         hand_card.style.transition = "transform 1s ease";
         hand_card.style.transform = "translate(0, 0) scale(1)";
 
@@ -311,7 +306,7 @@ function attach_drag(card_el, card, board, game, current_player) {
     let offset_x = 0;
     let offset_y = 0;
 
-    function drag_start(event) {
+    function drag_start(event) { //picked up card
         if (current_player.phase != "place" || game.phase == 2) { return };
         dragging = true;
         card_el.classList.add("dragging");
@@ -330,7 +325,7 @@ function attach_drag(card_el, card, board, game, current_player) {
         card_el.setPointerCapture(event.pointerId);
     }
 
-    function drag_moving(event) {
+    function drag_moving(event) { //moving
         if (!dragging || current_player.phase != "place") return;
 
         const board_rect = document.getElementById("board-drag-layer").getBoundingClientRect();
@@ -439,7 +434,7 @@ function attach_drag(card_el, card, board, game, current_player) {
         return { result: found_overlap, overlap_cards: overlap_cards };
     }
 
-    function drag_release(event) { //for playing card
+    function drag_release(event) { //place card on spot (snap)
         if (!dragging) return;
 
         dragging = false;
