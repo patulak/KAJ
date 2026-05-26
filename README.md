@@ -1,4 +1,5 @@
 # Codex Online
+Autor: Patrik Kolář
 
 ## Cíl projektu
 Cílem projektu bylo vytvořit webovou implementaci inspirovanou deskovou hrou **Codex Naturalis**, která umožňuje více hráčům hrát přímo v internetovém prohlížeči na jednom zařízení.
